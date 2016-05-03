@@ -19,4 +19,25 @@ class DATABASE_CONFIG {
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
+
+	public $staging = array(
+		'datasource' => 'Database/Postgres',
+		'persistent' => false,
+		'host' => 'ec2-107-20-174-127.compute-1.amazonaws.com',
+		'login' => 'pdkdllunnozuhi',
+		'port' => 5432,
+		'password' => 'EXiP5hQ7xnq65XFPzLfiDAZaaL',
+		'database' => 'dcakquvk3fak85',
+		'prefix' => '',
+		//'encoding' => 'utf8'
+	);
+
+	public function __constuct()
+	{
+		if(isset($_SERVER) && isset($_SERVER['SERVER_NAME'])){
+			if( $_SERVER['SERVER_NAME'] == 'peerblog.herokuapp.com' ){
+				$this->default = $this->staging;
+			}
+		}
+	}
 }
