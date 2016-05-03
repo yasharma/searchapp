@@ -1,0 +1,50 @@
+<!-- <table class="table table-bordered" ng-show=posts>
+	<thead>
+		<tr class="info">
+			<th>Sr. No.</th>
+			<th>Title</th>
+			<th>body</th>
+			<th>Date</th>
+			<th>Action</th>
+		</tr>	
+	</thead>
+	<tbody>
+		<tr ng-repeat="e in posts">
+			<td>{{$index + 1}}</td>
+			<td>{{e.Post.title}}</td>
+			<td>{{e.Post.body}}</td>
+			<td>{{e.Post.created}}</td>
+			<td>
+				<button class="btn btn-sm btn-primary" ng-click=editPost($index)>Edit</button>
+				<button class="btn btn-sm btn-danger" ng-click=deletePost($index)>Delete</button>
+			</td>
+		</tr>
+	</tbody>
+</table> -->
+<!-- Blog Entries Column -->
+<div class="col-md-8">
+    <!-- First Blog Post -->
+    <div ng-repeat="e in posts">
+	    <h2>
+	        <a href="#">{{e.Post.title}}</a>
+	    </h2>
+	    <p><span class="glyphicon glyphicon-time"></span> Posted on {{e.Post.created}}</p>
+	    <hr>
+	    <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+	    <hr>
+	    <p>{{e.Post.body}}</p>
+	    <!-- <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a> -->
+
+	    <hr>
+	</div>    
+
+    <!-- Pager -->
+    <ul class="pager">
+        <li class="previous">
+            <a href="#">&larr; Older</a>
+        </li>
+        <li class="next">
+            <a href="#">Newer &rarr;</a>
+        </li>
+    </ul>
+</div>
