@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
 	.controller('AppController',function($scope, $http, $location, $rootScope){
-		$rootScope.appURL = 'http://blog.dev';
+		$rootScope.appURL = 'https://peerblog.herokuapp.com';
 	})
 	.controller('PostController',function($scope, $http, $location, $rootScope){
 		var load = function(){
