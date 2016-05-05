@@ -36,10 +36,7 @@ class DATABASE_CONFIG {
 	{
 		if(isset($_SERVER) && isset($_SERVER['SERVER_NAME'])){
 			if( $_SERVER['SERVER_NAME'] == 'peerblog.herokuapp.com' ){
-				echo 'From If';die;
 				$this->default = $this->staging;
-			} else {
-				echo 'From else';die;
 			}
 		}
 	}
