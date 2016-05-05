@@ -45,6 +45,7 @@ class PagesController extends AppController {
  *	or MissingViewException in debug mode.
  */
 	public function display() {
+		echo $_SERVER['SERVER_NAME'];die;
 		$path = func_get_args();
 
 		$count = count($path);
