@@ -32,7 +32,7 @@ class DATABASE_CONFIG {
 		//'encoding' => 'utf8'
 	);
 
-	public function __constuct()
+	public function __construct()
 	{
 		if(isset($_SERVER) && isset($_SERVER['SERVER_NAME'])){
 			if( $_SERVER['SERVER_NAME'] == 'peerblog.herokuapp.com' ){
