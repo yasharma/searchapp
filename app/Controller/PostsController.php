@@ -3,14 +3,22 @@ App::uses('AppController', 'Controller');
 
 class PostsController extends AppController {
 
-	public $components = array('RequestHandler');
+	public $components = array('RequestHandler','Paginator');
+
 	public function index() {
 		$this->Post->recursive = 0;
-		$posts = $this->Post->find('all');
-		$this->set(array(
-			'posts' => $posts,
-			'_serialize' => array('posts') 
-		));
+        $this->paginate = array(
+            'limit' => 2
+        );
+        $posts = $this->paginate('Post');
+        if( empty($this->request->params['paging']['Post']) ){
+            $paging = false;
+        } else {
+            $paging = $this->request->params['paging']['Post'];
+        }
+        $this->set('posts', $posts);
+        $this->set('paging', $paging);
+		$this->set('_serialize' , array('posts', 'paging') );
 	}
 	public function view($id) {
         $post = $this->Post->findById($id);

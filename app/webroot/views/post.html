@@ -34,15 +34,7 @@
 	    <!-- <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a> -->
 
 	    <hr>
-	</div>    
+	</div>
 
-    <!-- Pager -->
-    <ul class="pager">
-        <li class="previous">
-            <a href="#">&larr; Older</a>
-        </li>
-        <li class="next">
-            <a href="#">Newer &rarr;</a>
-        </li>
-    </ul>
+	<uib-pager items-per-page="paging.limit" total-items="paging.count" ng-model="paging.page" ng-change="pageChanged()"></uib-pager>
 </div>

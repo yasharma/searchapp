@@ -1,20 +1,36 @@
 angular.module('app.controllers', [])
 	.controller('AppController',function($scope, $http, $location, $rootScope){
-		$rootScope.appURL = 'https://peerblog.herokuapp.com';
+		$rootScope.appURL = 'http://blog.dev';
 	})
 	.controller('PostController',function($scope, $http, $location, $rootScope){
 		var load = function(){
-			$http.get($rootScope.appURL + '/posts.json')
-				.success( function(response){
-					$scope.posts = response.posts;
+			$http.get($rootScope.appURL + '/posts.json').then( function(response){
+				$scope.posts = response.data.posts;
+				$scope.paging = response.data.paging;
 			});
-		}
+		};
+
+		var getData = function(option){
+			var pageNum = option.params.page;
+			$http.get($rootScope.appURL + '/posts/index/page:'+ pageNum +'.json').then( function(response){
+				$scope.posts = response.data.posts;
+				$scope.paging = response.data.paging;
+			});
+		};
 		
+		$scope.pageChanged = function () {
+		   	getData({
+		      	params: {
+		        	page: $scope.paging.page
+		      	}
+		   	});
+		};
+
 		load();
 		$scope.deletePost = function(index){
 			var e = $scope.posts[index];
 			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
-				.success(function(response){
+				.then(function(response){
 					load();
 			});
 		};
@@ -28,7 +44,7 @@ angular.module('app.controllers', [])
 			var _data = {};
 			_data.Post = $scope.post;
 			$http.post($rootScope.appURL + '/posts.json', _data)
-				.success(function(response){
+				.then(function(response){
 					$location.path('/');
 			});
 		};
@@ -37,7 +53,7 @@ angular.module('app.controllers', [])
 	})
 	.controller('EditPostController' ,function($scope,$http,$routeParams,$location,$rootScope){
 		$http.get($rootScope.appURL + '/posts/' + $routeParams['id'] + '.json')
-        	.success(function(data) {
+        	.then(function(data) {
             	$scope.post = data.post.Post;
         });
 
@@ -45,7 +61,7 @@ angular.module('app.controllers', [])
 			var _data = {};
 			_data.Post = $scope.post;
 			$http.put($rootScope.appURL + '/posts/' + $scope.post.id + '.json', _data)
-				.success(function(response){
+				.then(function(response){
 					$location.path('/');
 			});
 		};

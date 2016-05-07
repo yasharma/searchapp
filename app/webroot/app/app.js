@@ -1,4 +1,4 @@
-angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular'])
+angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular','ui.bootstrap'])
 	.config(['$routeProvider', function($routeProvider){
 		$routeProvider
 		.when('/', {
