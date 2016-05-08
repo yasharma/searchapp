@@ -36,9 +36,9 @@
  */
 	if(isset($_SERVER)){
 		if( $_SERVER['SERVER_NAME'] == 'peerblog.herokuapp.com' ){
-			Configure::write('debug', 0);
+			Configure::write('debug', 1);
 		} else if($_SERVER['HTTP_HOST'] == 'peerblog.herokuapp.com'){
-			Configure::write('debug', 0);
+			Configure::write('debug', 1);
 		} else {
 			Configure::write('debug', 2);
 		}
