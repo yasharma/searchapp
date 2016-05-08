@@ -35,12 +35,11 @@ class DATABASE_CONFIG {
 	public function __construct()
 	{
 		if(isset($_SERVER) && isset($_SERVER['SERVER_NAME'])){
-			echo $_SERVER['SERVER_NAME'];
 			if( $_SERVER['SERVER_NAME'] == 'peerblog.herokuapp.com' ){
-				echo 'if';
+				$this->default = $this->staging;
+			} else {
 				$this->default = $this->staging;
 			}
 		}
-		print_r($this->default);die;
 	}
 }
