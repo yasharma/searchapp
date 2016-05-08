@@ -3,7 +3,7 @@ angular.module('app.controllers', [])
 		$rootScope.appURL = $location.host() === 'blog.dev' ? 'http://blog.dev' : 'https://peerblog.herokuapp.com';
 	})
 	.controller('PostController', function($scope, $http, $location, $rootScope, cfpLoadingBar, $timeout){
-		// cfpLoadingBar.start(); // uncomment for fake loader shows first time
+		// cfpLoadingBar.start();
 		var load = function(){
 			$http.get($rootScope.appURL + '/posts.json').then( function(response){
 				$scope.posts = response.data.posts;
