@@ -26,9 +26,9 @@
     <!-- First Blog Post -->
     <div ng-repeat="e in posts">
 	    <h2>
-	        <a href="#">{{e.Post.title}}</a>
+	        <a ng-click="viewPost($index)" href="">{{e.Post.title}}</a>
 	    </h2>
-	    <p><span class="glyphicon glyphicon-time"></span> Posted on {{e.Post.created}}</p>
+	    <p><span class="glyphicon glyphicon-time"></span> Posted {{e.Post.created}}</p>
 	    <hr>
 	    <div ng-bind-html="e.Post.body"></div>
 	    <!-- <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a> -->

@@ -1,8 +1,9 @@
 angular.module('app.controllers', [])
 	.controller('AppController',function($scope, $http, $location, $rootScope){
-		$rootScope.appURL = 'https://peerblog.herokuapp.com';
+		$rootScope.appURL = $location.host() === 'blog.dev' ? 'http://blog.dev' : 'https://peerblog.herokuapp.com';
 	})
-	.controller('PostController',function($scope, $http, $location, $rootScope){
+	.controller('PostController', function($scope, $http, $location, $rootScope, cfpLoadingBar, $timeout){
+		// cfpLoadingBar.start();
 		var load = function(){
 			$http.get($rootScope.appURL + '/posts.json').then( function(response){
 				$scope.posts = response.data.posts;
@@ -27,6 +28,7 @@ angular.module('app.controllers', [])
 		};
 
 		load();
+
 		$scope.deletePost = function(index){
 			var e = $scope.posts[index];
 			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
@@ -38,8 +40,12 @@ angular.module('app.controllers', [])
 		$scope.editPost = function(index){
 			$location.path('/edit/' + $scope.posts[index].Post.id);
 		};
+
+		$scope.viewPost = function(index){
+			$location.path('/' + $scope.posts[index].Post.id);
+		};
 	})
-	.controller('NewPostController' ,function($scope,$http,$location,$rootScope){		
+	.controller('NewPostController', function($scope, $http, $location, $rootScope){
 		$scope.save = function () {
 			var _data = {};
 			_data.Post = $scope.post;
@@ -51,7 +57,7 @@ angular.module('app.controllers', [])
 
 		$scope.cancel = function () { $location.path('/'); };
 	})
-	.controller('EditPostController' ,function($scope,$http,$routeParams,$location,$rootScope){
+	.controller('EditPostController', function($scope, $http, $routeParams, $location, $rootScope){
 		$http.get($rootScope.appURL + '/posts/' + $routeParams['id'] + '.json')
         	.then(function(data) {
             	$scope.post = data.post.Post;
@@ -67,4 +73,13 @@ angular.module('app.controllers', [])
 		};
 
 		$scope.cancel = function () { $location.path('/'); };
+	})
+	.controller('ViewPostController', function($scope, $http, $routeParams, $location, $rootScope){
+		$http.get($rootScope.appURL + '/posts/' + $routeParams['id'] + '.json')
+        	.then(function(response) {
+            	$scope.Post = response.data.post.Post;
+        });
+	})
+	.controller('AdminController', function($scope, $http, $location, $rootScope){
+		console.log('Admin Area!');
 	});

@@ -1,6 +1,7 @@
 <?php
 App::uses('AppModel', 'Model');
 App::uses('CakeTime','Utility');
+App::uses('CakeText', 'Utility');
 /**
  * Post Model
  *
@@ -9,7 +10,9 @@ class Post extends AppModel {
 	public function afterFind($results, $primary = false) {
 	    foreach ($results as $key => $val) {
 	        if (isset($val['Post']['created'])) {
-	            $results[$key]['Post']['created'] = CakeTime::timeAgoInWords($val['Post']['created']);
+	            $results[$key]['Post']['created'] = CakeTime::timeAgoInWords($val['Post']['created'], 
+	            	array('format' => 'F jS, Y', 'end' => '+3 week')
+	            );
 	        }
 	    }
 	    return $results;
