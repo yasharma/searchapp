@@ -6,7 +6,6 @@ class PostsController extends AppController {
 	public $components = array('RequestHandler','Paginator');
 
 	public function index() {
-        pr($_SERVER);die;
 		$this->Post->recursive = 0;
         $this->paginate = array(
             'limit' => 10,
