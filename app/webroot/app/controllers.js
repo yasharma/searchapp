@@ -2,7 +2,8 @@ angular.module('app.controllers', [])
 	.controller('AppController',function($scope, $http, $location, $rootScope){
 		$rootScope.appURL = 'http://blog.dev';
 	})
-	.controller('PostController',function($scope, $http, $location, $rootScope){
+	.controller('PostController', function($scope, $http, $location, $rootScope, cfpLoadingBar, $timeout){
+		cfpLoadingBar.start();
 		var load = function(){
 			$http.get($rootScope.appURL + '/posts.json').then( function(response){
 				$scope.posts = response.data.posts;
@@ -27,6 +28,7 @@ angular.module('app.controllers', [])
 		};
 
 		load();
+
 		$scope.deletePost = function(index){
 			var e = $scope.posts[index];
 			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
@@ -39,7 +41,7 @@ angular.module('app.controllers', [])
 			$location.path('/edit/' + $scope.posts[index].Post.id);
 		};
 	})
-	.controller('NewPostController' ,function($scope,$http,$location,$rootScope){		
+	.controller('NewPostController', function($scope, $http, $location, $rootScope){
 		$scope.save = function () {
 			var _data = {};
 			_data.Post = $scope.post;
@@ -51,7 +53,7 @@ angular.module('app.controllers', [])
 
 		$scope.cancel = function () { $location.path('/'); };
 	})
-	.controller('EditPostController' ,function($scope,$http,$routeParams,$location,$rootScope){
+	.controller('EditPostController', function($scope, $http, $routeParams, $location, $rootScope){
 		$http.get($rootScope.appURL + '/posts/' + $routeParams['id'] + '.json')
         	.then(function(data) {
             	$scope.post = data.post.Post;
@@ -67,4 +69,7 @@ angular.module('app.controllers', [])
 		};
 
 		$scope.cancel = function () { $location.path('/'); };
+	})
+	.controller('AdminController', function($scope, $http, $location, $rootScope){
+		console.log('Admin Area!');
 	});

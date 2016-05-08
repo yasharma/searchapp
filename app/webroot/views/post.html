@@ -36,5 +36,5 @@
 	    <hr>
 	</div>
 
-	<uib-pager items-per-page="paging.limit" total-items="paging.count" ng-model="paging.page" ng-change="pageChanged()"></uib-pager>
+	<uib-pager ng-if="paging.count > paging.limit" items-per-page="paging.limit" total-items="paging.count" ng-model="paging.page" ng-change="pageChanged()"></uib-pager>
 </div>

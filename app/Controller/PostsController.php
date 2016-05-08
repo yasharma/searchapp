@@ -8,7 +8,8 @@ class PostsController extends AppController {
 	public function index() {
 		$this->Post->recursive = 0;
         $this->paginate = array(
-            'limit' => 2
+            'limit' => 10,
+            'order' => 'id desc'
         );
         $posts = $this->paginate('Post');
         if( empty($this->request->params['paging']['Post']) ){
