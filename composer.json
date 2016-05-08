@@ -1,0 +1,11 @@
+CAKEPHP_APP_TMP_PATH="www/app/tmp"
+
+# make tmp dir
+echo "-----> Creating CakePHP tmp directories"
+mkdir -p $CAKEPHP_APP_TMP_PATH/cache/models
+mkdir -p $CAKEPHP_APP_TMP_PATH/cache/persistent
+mkdir -p $CAKEPHP_APP_TMP_PATH/cache/views
+mkdir -p $CAKEPHP_APP_TMP_PATH/logs
+mkdir -p $CAKEPHP_APP_TMP_PATH/sessions
+mkdir -p $CAKEPHP_APP_TMP_PATH/tests
+chmod -R 777 $CAKEPHP_APP_TMP_PATH
