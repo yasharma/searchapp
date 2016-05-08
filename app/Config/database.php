@@ -39,5 +39,6 @@ class DATABASE_CONFIG {
 				$this->default = $this->staging;
 			}
 		}
+		print_r($this->default);
 	}
 }
