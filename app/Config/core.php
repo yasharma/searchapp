@@ -34,9 +34,11 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-	if(isset($_SERVER) && isset($_SERVER['SERVER_NAME'])){
+	if(isset($_SERVER)){
 		if( $_SERVER['SERVER_NAME'] == 'peerblog.herokuapp.com' ){
-			Configure::write('debug', 2);
+			Configure::write('debug', 0);
+		} else if($_SERVER['HTTP_HOST'] == 'peerblog.herokuapp.com'){
+			Configure::write('debug', 0);
 		} else {
 			Configure::write('debug', 2);
 		}
