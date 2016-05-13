@@ -1,15 +1,21 @@
 <div>
-	<form class="form-horizontal" name="postForm" role="form" ng-submit="save()">
+	<form class="form-horizontal" name="postForm" enctype="multipart/form-data" role="form" ng-submit="save()">
 	  <div class="form-group">
 	    <label for="inputTitle" class="col-sm-2 control-label">Title</label>
 	    <div class="col-sm-10">
-	      <input type="text" class="form-control" id="inputTitle" name="title" placeholder="Title" ng-model="post.title" />
+	      <input type="text" class="form-control" id="inputTitle" name="title" placeholder="Title" ng-model="post.title" required/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="col-sm-2 control-label">Image</label>
+	    <div class="col-sm-10">
+	      <input type="file" name="image" onchange="angular.element(this).scope().uploadFile(this.files)"/>
 	    </div>
 	  </div>
 	  <div class="form-group">
 	    <label for="inputDesc" class="col-sm-2 control-label">Body</label>
 	    <div class="col-sm-10">
-	    	<div text-angular ng-model="post.body"></div>
+	    	<text-angular ng-model="post.body" data-ng-required></text-angular>
 	      <!-- <textarea  text-angular class="form-control" id="inputDesc" placeholder="Body" ng-model="htmlVariable" required></textarea> -->
 	    </div>
 	  </div>

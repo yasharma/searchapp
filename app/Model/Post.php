@@ -1,7 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
 App::uses('CakeTime','Utility');
-App::uses('CakeText', 'Utility');
 /**
  * Post Model
  *
@@ -23,11 +22,23 @@ class Post extends AppModel {
         if (isset($this->data['Post']['created']) && isset($this->data['Post']['id'])) {
             unset($this->data['Post']['created'] );
         }
-	    
+	    if(!empty($_FILES['file']['name'])){
+	    	$this->data['Post']['image'] = $this->_uploadFile($_FILES['file']);
+	    }
 	    return true;
 	}
 
 	public function dateFormatAfterFind($dateString, $format = 'Y-m-d') {
 	    return date($format, strtotime($dateString));
+	}
+
+	protected function _uploadFile($_file){
+		$destination = IMAGES.'posts_images'. DS;
+		$ext = pathinfo($_file['name'], PATHINFO_EXTENSION);
+		$safe_filename = rand(1000,10000000).time().'.'.$ext;
+		if(move_uploaded_file($_file['tmp_name'], $destination.$safe_filename)){
+			return $safe_filename;
+		}
+		return false;
 	}
 }

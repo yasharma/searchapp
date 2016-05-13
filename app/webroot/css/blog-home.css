@@ -34,3 +34,23 @@ footer {
 textarea.ta-bind {
 	width: 100%;
 }
+
+/* Homepage thumbnail */
+.thumbnail{ 
+	padding: 0;
+	border-radius: 0; 
+}
+.caption{ 
+	position: relative; 
+	overflow: auto;  
+	min-height: 90px;
+}
+.thumbnail .caption p { 
+	margin: 0 0 5px 0; 
+	font-size: 12px; 
+	position: absolute;
+	bottom: 0;
+}
+.well{
+	border-radius: 0;
+}

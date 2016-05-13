@@ -9,6 +9,7 @@ class PostsController extends AppController {
 		$this->Post->recursive = 0;
         $this->paginate = array(
             'limit' => 10,
+            'fields' => array('id', 'title', 'image','created'),
             'order' => 'id desc'
         );
         $posts = $this->paginate('Post');
@@ -30,7 +31,9 @@ class PostsController extends AppController {
     }
 
 	public function add() {
-		if ($this->Post->save($this->request->data)) {
+        $data = $this->request->data['Post'];
+        $newData['Post'] = json_decode($data, true);
+		if ($this->Post->save($newData)) {
 		    $message = array(
 		        'text' => __('Saved'),
 		        'type' => 'success'

@@ -1,5 +1,6 @@
-angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular','ui.bootstrap','angular-loading-bar'])
-	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider, $locationProvider){
+angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
+	.constant('IMAGEPATH', 'http://blog')
+	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
 		$routeProvider
 		.when('/', {
@@ -21,6 +22,4 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngul
 		.otherwise({
 			redirectTo: '/'
 		});
-		// use the HTML5 History API
-        $locationProvider.html5Mode(true);
 	}]);
