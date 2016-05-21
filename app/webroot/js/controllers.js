@@ -96,5 +96,12 @@ angular.module('app.controllers', [])
         });
 	})
 	.controller('AdminController', function($scope, $http, $location, $rootScope){
-		console.log('Admin Area!');
+		$scope.login = function(){
+			var _data = {};
+			_data.User = $scope.user;
+			$http.post($rootScope.appURL + '/users/login.json', _data)
+				.then(function(response){
+					$scope.Message = response.data.message;
+			});
+		}
 	});

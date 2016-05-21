@@ -1,5 +1,4 @@
 angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
-	.constant('IMAGEPATH', 'http://blog')
 	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
 		$routeProvider

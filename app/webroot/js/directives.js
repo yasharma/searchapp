@@ -18,6 +18,16 @@ angular.module('app.directives', [])
             }]
         }
     })
+    .directive('sidebar', function () {
+        return {
+            restrict: 'A',            
+            //scope: {user: '='}, // This is one of the cool things :). Will be explained in post.
+            templateUrl: "elements/sidebar.html",
+            controller: ['$scope', '$filter', function ($scope, $filter) {
+                // Your behaviour goes here :)
+            }]
+        }
+    })
     .directive('navMenu', function($location) {
         return function(scope, element, attrs) {
             var links = element.find('a'),
