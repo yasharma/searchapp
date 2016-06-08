@@ -1,0 +1,30 @@
+{
+  "name": "blog",
+  "version": "4.4.4",
+  "description": "cakephp and angularjs",
+  "main": "index.html",
+  "scripts": {
+    "test": "blog.dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yasharma/peerblog.git"
+  },
+  "keywords": [
+    "cakephp",
+    "angularjs"
+  ],
+  "author": "Yash Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yasharma/peerblog/issues"
+  },
+  "homepage": "https://github.com/yasharma/peerblog#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  }
+}

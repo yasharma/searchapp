@@ -1,4 +1,6 @@
-angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
+(function(){
+	'use strict';
+	angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
 	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
 		$routeProvider
@@ -22,3 +24,4 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngul
 			redirectTo: '/'
 		});
 	}]);
+})();	

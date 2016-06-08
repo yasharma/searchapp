@@ -1,4 +1,6 @@
-angular.module('app.directives', [])
+(function(){    
+    'use strict';
+    angular.module('app.directives', [])
     .directive('footer', function() {
         return {
             restrict: 'A',            
@@ -6,7 +8,7 @@ angular.module('app.directives', [])
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        }
+        };
     })
     .directive('header', function () {
         return {
@@ -16,7 +18,7 @@ angular.module('app.directives', [])
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        }
+        };
     })
     .directive('sidebar', function () {
         return {
@@ -26,7 +28,27 @@ angular.module('app.directives', [])
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        }
+        };
+    })
+    .directive('adminHeader', function () {
+        return {
+            restrict: 'A',            
+            //scope: {user: '='}, // This is one of the cool things :). Will be explained in post.
+            templateUrl: "elements/admin/header.html",
+            controller: ['$scope', '$filter', function ($scope, $filter) {
+                // Your behaviour goes here :)
+            }]
+        };
+    })
+    .directive('adminSidebar', function () {
+        return {
+            restrict: 'A',            
+            //scope: {user: '='}, // This is one of the cool things :). Will be explained in post.
+            templateUrl: "elements/admin/sidebar.html",
+            controller: ['$scope', '$filter', function ($scope, $filter) {
+                // Your behaviour goes here :)
+            }]
+        };
     })
     .directive('navMenu', function($location) {
         return function(scope, element, attrs) {
@@ -79,3 +101,4 @@ angular.module('app.directives', [])
           };
         }
       ]);
+})();

@@ -1,0 +1,32 @@
+{
+  "name": "blog",
+  "description": "cakephp and angularjs",
+  "main": "index.html",
+  "authors": [
+    "Yash Sharma"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "cakephp",
+    "angularjs"
+  ],
+  "homepage": "https://github.com/yasharma/peerblog",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-animate": "^1.5.6",
+    "angular-loading-bar": "^0.9.0",
+    "angular-route": "^1.5.6",
+    "angular-touch": "^1.5.6",
+    "bootstrap": "^3.3.6",
+    "Ionicons": "ionicons#^2.0.1",
+    "textAngular": "^1.5.1",
+    "angular-bootstrap": "^1.3.3",
+    "angular-local-storage": "^0.2.7"
+  }
+}

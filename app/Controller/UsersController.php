@@ -8,6 +8,10 @@ class UsersController extends AppController {
 		'RequestHandler',
 		'Paginator',
         'Flash',
+        'Security' => array(
+        	'csrfUseOnce' => false,
+        	'unlockedActions' => array('login')
+        ),
         'Auth' => array(
             'loginAction' => array(
                 'controller' => 'users',
@@ -23,43 +27,56 @@ class UsersController extends AppController {
         )
     );
 
-    public function isAuthorized($user) {
-        if (isset($user['role']) && $user['role'] === 'admin') {
-            return true;
-        }
-
-        return false;
-    }
-
     public function beforeFilter() {
         $this->Auth->allow('index', 'login');
     }
 
+    public function _setResponseToken(){
+    	if(isset($this->request->params['_Token'])){
+    		$this->response->header(array('token' => $this->request->params['_Token']['key']));
+    	}
+    }
+
     public function login() {
-    	$this->Auth->logout();
-        if ($this->Auth->login()) {
-            $message = array(
-		        'user' => $this->Auth->user(),
-		        'type' => 'success'
-		    );
-        } else {
-        	$message = array(
-		        'text' => __('Invalid username or password, try again'),
-		        'type' => 'error'
-		    );
-        }
+    	if($this->request->is('post')){
+	        if ($this->Auth->login()) {
+	        	$this->_setResponseToken();
+	            $message = array(
+			        'text' => __('Success'),
+			        'type' => 'success'
+			    );
+			    $user = $this->Auth->user();
+	        } else {
+	        	$message = array(
+			        'text' => __('Invalid username or password, try again'),
+			        'type' => 'error'
+			    );
+			    $user = null;
+	        }
+    	}
+        
 		$this->set(array(
 		    'message' => $message,
-		    '_serialize' => array('message')
+		    'user' => $user,
+		    '_serialize' => array('message','user')
 		));
     }
 
     public function logout() {
-        return $this->redirect($this->Auth->logout());
+        if($this->Auth->logout()){
+        	$this->set(array(
+        	    'message' => array('type' => 'success', 'text' => 'logout successfully'),
+        	    '_serialize' => array('message')
+        	));
+        }
     }
 
 	public function index() {
-		
+		$post = $this->Post->find('count');
+		$this->set(array(
+		    'post' => $post,
+		    '_serialize' => array('post')
+		));
 	}
 
 	public function view($id = null) {
