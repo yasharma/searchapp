@@ -45,7 +45,7 @@
         return a;
     }).run([ "$rootScope", "$location", "localStorageService", "AuthenticationService", function(a, b, c, d) {
         a.$on("$routeChangeStart", function(a, e, f) {
-            (null !== e && null !== e.access || e.access.requiredLogin && !d.isLogged && !c.get("user")) && (d.isLogged = 0, 
+            null === e || null === e.access || !e.access.requiredLogin || d.isLogged || c.get("user") || (d.isLogged = 0, 
             b.path("/"));
         }), a.user = c.get("user");
     } ]);
