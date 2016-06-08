@@ -104,7 +104,7 @@
 			//if (!isValid) return;
 			var _data = {};
 			_data.User = $scope.user;
-			$http.post($rootScope.appURL + '/users/login.json', _data)
+			$http.post($rootScope.appURL + '/users.json', _data)
 				.then(function(response){
 					if( response.data.message.type == 'error' ){
 						$scope.Message = response.data.message;
