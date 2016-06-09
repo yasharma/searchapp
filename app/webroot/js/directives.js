@@ -64,14 +64,16 @@ angular.module('app.directives', [])
 
             for (var i = links.length - 1; i >= 0; i--) {
                 var link = angular.element(links[i]);
-                var url = link.attr('href');
+                var url = link.attr('href') !== undefined ? link.attr('href') : link.attr('ng-href');
+                
                 if (url.substring(0,1) === '#') {
                     urlMap[url.substring(1)] = link;
+                } else if( url.substring(0,url.indexOf('/')) === '{{admin}}' ) {
+                    urlMap[url.substring(url.indexOf('/'))] = link;
                 } else {
                     urlMap[url] = link;
                 }
             }
-
             scope.$on('$routeChangeStart', function() {
                 var path = urlMap[$location.path()];
 
