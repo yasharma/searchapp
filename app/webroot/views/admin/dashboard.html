@@ -1,14 +1,33 @@
-
+<!-- Content Header (Page header) -->
 <section class="content-header">
-	<h1>Dashboard</h1>
-	<ol class="breadcrumb">
-		<li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-	</ol>
+  <h1>
+    Dashboard
+    <small>Control panel</small>
+  </h1>
+  <ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i> Dashboard</li>
+  </ol>
 </section>
 
 <!-- Main content -->
 <section class="content">
 
-	<!-- Your Page Content Here -->
+  <!-- Your Page Content Here -->
+  <div class="row">
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-purple">
+        <div class="inner">
+          <h3>{{Post}}</h3>
 
-</section><!-- /.content -->
+          <p>New Posts</p>
+        </div>
+        <div class="icon">
+          <i class="ion-document-text"></i>
+        </div>
+        <a ng-href="{{admin}}/posts" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+  </div>
+
+</section>
+<!-- /.content -->

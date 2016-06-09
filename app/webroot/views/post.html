@@ -23,20 +23,22 @@
 </table> -->
 <!-- Blog Entries Column -->
 
-
 <div class="col-md-8">
 	<div class="row">
 		<div ng-repeat="e in posts" class="col-sm-6 col-md-6" ng-click="viewPost($index)">
 			<div class="thumbnail">
-                <div class="thumb-img">
-				   <img class="img-responsive" ng-src="{{ imagePath + e.Post.image}}">
-                </div>
+				<div class="thumb-img">
+					<img class="img-responsive" ng-src="{{ imagePath + e.Post.image}}">
+				</div>	
 				<div class="caption">
 					<h4>{{e.Post.title | words:7}}</h4>
 					<p><span class="glyphicon glyphicon-time"></span> Posted {{e.Post.created}}</p>
 				</div>
 			</div>
 		</div>
-		<uib-pager ng-if="paging.count > paging.limit" items-per-page="paging.limit" total-items="paging.count" ng-model="paging.page" ng-change="pageChanged()"></uib-pager>
+
 	</div>	
+	<nav class="center">
+		<uib-pagination ng-if="paging.count > paging.limit" items-per-page="paging.limit" total-items="paging.count" ng-model="paging.page" ng-change="pageChanged()"></uib-pagination>
+	</nav>
 </div>

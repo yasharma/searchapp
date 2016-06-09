@@ -1,6 +1,4 @@
-(function(){    
-    'use strict';
-    angular.module('app.directives', [])
+angular.module('app.directives', [])
     .directive('footer', function() {
         return {
             restrict: 'A',            
@@ -8,47 +6,51 @@
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        };
+        }
     })
     .directive('header', function () {
         return {
             restrict: 'A',            
-            //scope: {user: '='}, // This is one of the cool things :). Will be explained in post.
+            //scope: {user: '='},
             templateUrl: "elements/header.html",
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        };
+        }
     })
     .directive('sidebar', function () {
         return {
             restrict: 'A',            
-            //scope: {user: '='}, // This is one of the cool things :). Will be explained in post.
+            //scope: {user: '='},
             templateUrl: "elements/sidebar.html",
-            controller: ['$scope', '$filter', function ($scope, $filter) {
+            controller: ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
                 // Your behaviour goes here :)
+                $scope.search = function(isValid){
+                    if(!isValid) return;
+                    console.log($scope.post.search);
+                };
             }]
-        };
+        }
     })
     .directive('adminHeader', function () {
         return {
             restrict: 'A',            
-            //scope: {user: '='}, // This is one of the cool things :). Will be explained in post.
+            //scope: {user: '='},
             templateUrl: "elements/admin/header.html",
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        };
+        }
     })
     .directive('adminSidebar', function () {
         return {
             restrict: 'A',            
-            //scope: {user: '='}, // This is one of the cool things :). Will be explained in post.
+            //scope: {user: '='},
             templateUrl: "elements/admin/sidebar.html",
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        };
+        }
     })
     .directive('navMenu', function($location) {
         return function(scope, element, attrs) {
@@ -78,27 +80,11 @@
             });
         };
     })
-    .directive('fileModel', [
-        '$parse',
-        function ($parse) {
-          return {
-            restrict: 'A',
-            link: function(scope, element, attrs) {
-              var model = $parse(attrs.fileModel);
-              var modelSetter = model.assign;
-
-              element.bind('change', function(){
-                scope.$apply(function(){
-                  if (attrs.multiple) {
-                    modelSetter(scope, element[0].files);
-                  }
-                  else {
-                    modelSetter(scope, element[0].files[0]);
-                  }
-                });
-              });
-            }
-          };
+    .directive('setHeight', function($window){
+      return{
+        restrict:'A',
+        link: function(scope, element, attrs){
+            element.css('min-height', ($window.innerHeight - 50) + 'px');
         }
-      ]);
-})();
+      }
+    });

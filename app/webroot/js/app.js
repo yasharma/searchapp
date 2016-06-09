@@ -1,6 +1,4 @@
-(function(){
-	'use strict';
-	angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
+angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.services','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
 	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
 		$routeProvider
@@ -20,8 +18,11 @@
 			templateUrl: 'views/single.html', 
 			controller: 'ViewPostController'
 		})
+		.when('/admin', {
+			templateUrl: 'views/admin.html', 
+			controller: 'AdminController'
+		})
 		.otherwise({
 			redirectTo: '/'
 		});
 	}]);
-})();	

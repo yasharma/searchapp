@@ -31,15 +31,21 @@ footer {
 	border: 1px solid #EEE;
 }
 
+/*.ta-scroll-window.form-control {
+  height: auto;
+  max-height: 300px;
+}*/
+
 textarea.ta-bind {
 	width: 100%;
 }
 
 /* Homepage thumbnail */
 .thumbnail{ 
-	padding: 0;
+	padding: 0; 
 	cursor: pointer;
-	opacity: 0.9;
+    opacity: 0.9;
+    border: 1px solid #e1e8ed;
 }
 .thumbnail.active, .thumbnail:focus, .thumbnail:hover {
     opacity: 1;
@@ -47,10 +53,7 @@ textarea.ta-bind {
 .caption{ 
 	position: relative; 
 	overflow: auto;  
-	min-height: 110px;
-}
-.caption h4 {
-	font: bold 16px/1.5em "Roboto", Arial, sans-serif;
+	min-height: 90px;
 }
 .thumbnail .caption p { 
 	margin: 0 0 5px 0; 
@@ -58,15 +61,26 @@ textarea.ta-bind {
 	position: absolute;
 	bottom: 0;
 }
-.thumb-img {
-    float: left;
-    height: 250px;
-    overflow: hidden;
-    width: 100%;
+.thumbnail .caption h4{
+    font: bold 16px/1.5em "Roboto", Arial, sans-serif;
 }
-.thumb-img img {
+.well{
+	border-radius: 0;
+}
+.thumbnail a>img, .thumbnail>img{
 	border-radius: 4px 4px 0 0;
-    display: block;
-    margin: 0 auto;
-    width: auto;
+}
+.thumb-img{
+	float: left;
+	height: 250px;
+	overflow: hidden;
+	width: 100%;
+}
+.thumb-img img{
+	display: block;
+	margin: 0 auto;
+	width: auto;
+}
+.center{
+	text-align: center;
 }

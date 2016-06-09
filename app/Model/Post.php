@@ -1,6 +1,5 @@
 <?php
 App::uses('AppModel', 'Model');
-App::uses('CakeTime','Utility');
 /**
  * Post Model
  *
@@ -26,10 +25,6 @@ class Post extends AppModel {
 	    	$this->data['Post']['image'] = $this->_uploadFile($_FILES['file']);
 	    }
 	    return true;
-	}
-
-	public function dateFormatAfterFind($dateString, $format = 'Y-m-d') {
-	    return date($format, strtotime($dateString));
 	}
 
 	protected function _uploadFile($_file){

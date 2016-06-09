@@ -1,10 +1,10 @@
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic);
-.form-control:focus{
-	border-color: #605ca8;
-}
-a{
-	color: #605ca8;
-}
-a:hover, a:active, a:focus{
-	color: #524E8F;
-}
+/* Style for admin layout */
+.form-control:focus{border-color: #605ca8; }
+a{color: #605ca8; }
+a:hover, a:active, a:focus{color: #514E8F; }
+.nav-tabs-custom>.nav-tabs>li.active, .box.box-purple{ border-top-color: #605ca8; }
+.nav-tabs-custom .nav-tabs h4.tab-title{ margin-top: 0; margin-bottom: 0;}
+.alert { border-radius: 0;  }
+#loading-bar .bar { background: #222D32;  }
+.post-list-header > h1{margin: 0; font-size: 24px; } 
+.pagination{ margin: 0; }
