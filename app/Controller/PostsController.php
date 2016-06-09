@@ -3,6 +3,11 @@ App::uses('AppController', 'Controller');
 
 class PostsController extends AppController {
 
+    public function beforeFilter() {
+        $this->SecurityToken->unlockedActions = array('index','view');
+        $this->Auth->allow();
+    }
+
 	public function index() {
         $this->getPostsList(10, array('id', 'title', 'image','created'));
 	}

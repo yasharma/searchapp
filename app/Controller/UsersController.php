@@ -3,32 +3,6 @@ App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
 
-	public $components = array(
-		'Security' => array(
-			'csrfUseOnce' => false,
-			'unlockedActions' => array('login')
-		),
-		'Auth' => array(
-			'loginRedirect' => array(
-                'controller' => 'users',
-                'action' => 'index',
-                'ext' => 'json'
-            ),
-            'loginAction' => array(
-            	'controller' => 'users',
-                'action' => 'login',
-                'ext' => 'json'
-            ),
-	        'authenticate' => array(
-	            'Form' => array(
-	            	'passwordHasher' => 'Blowfish',
-	                'fields' => array(
-	                  'username' => 'email'
-	                )
-	            )
-	        )
-	    )
-	);
 	//public $autoRender = false;
 	public $uses = array('User','Post');
 
@@ -185,6 +159,6 @@ class UsersController extends AppController {
 
 	public function posts_list()
 	{
-		$this->getPostsList(20, array('id', 'title', 'image','created'), false);	
+		$this->getPostsList(20, array('id', 'title', 'status','image','created'), false);	
 	}	
 }

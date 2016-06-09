@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 angular.module('app.directives', [])
     .directive('footer', function() {
         return {
@@ -6,7 +9,7 @@ angular.module('app.directives', [])
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        }
+        };
     })
     .directive('header', function () {
         return {
@@ -16,7 +19,7 @@ angular.module('app.directives', [])
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        }
+        };
     })
     .directive('sidebar', function () {
         return {
@@ -30,7 +33,7 @@ angular.module('app.directives', [])
                     console.log($scope.post.search);
                 };
             }]
-        }
+        };
     })
     .directive('adminHeader', function () {
         return {
@@ -40,7 +43,7 @@ angular.module('app.directives', [])
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        }
+        };
     })
     .directive('adminSidebar', function () {
         return {
@@ -50,7 +53,7 @@ angular.module('app.directives', [])
             controller: ['$scope', '$filter', function ($scope, $filter) {
                 // Your behaviour goes here :)
             }]
-        }
+        };
     })
     .directive('navMenu', function($location) {
         return function(scope, element, attrs) {
@@ -86,5 +89,6 @@ angular.module('app.directives', [])
         link: function(scope, element, attrs){
             element.css('min-height', ($window.innerHeight - 50) + 'px');
         }
-      }
+      };
     });
+}());

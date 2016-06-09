@@ -1,7 +1,35 @@
 <?php
 
 class AppController extends Controller {
-	public $components = array('RequestHandler','Paginator');
+
+	public $components = array(
+		'RequestHandler',
+		'Paginator',
+		'SecurityToken' => array(
+			'csrfUseOnce' => false,
+			'unlockedActions' => array('login')
+		),
+		'Auth' => array(
+			'loginRedirect' => array(
+                'controller' => 'users',
+                'action' => 'index',
+                'ext' => 'json'
+            ),
+            'loginAction' => array(
+            	'controller' => 'users',
+                'action' => 'login',
+                'ext' => 'json'
+            ),
+	        'authenticate' => array(
+	            'Form' => array(
+	            	'passwordHasher' => 'Blowfish',
+	                'fields' => array(
+	                  'username' => 'email'
+	                )
+	            )
+	        )
+	    )
+	);
 
 	public function beforeFilter() {
 		

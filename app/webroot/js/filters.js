@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 angular.module('truncate', [])
     .filter('words', function () {
         return function (input, words) {
@@ -12,3 +15,4 @@ angular.module('truncate', [])
             return input;
         };
     });
+}());    

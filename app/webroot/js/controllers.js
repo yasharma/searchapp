@@ -1,10 +1,12 @@
-angular.module('app.controllers', [])
+(function() {
+	'use strict';
+
+	angular.module('app.controllers', [])
 	.controller('AppController', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
 		var protocol = $location.protocol();
 		$rootScope.appURL = $location.host() === 'blog.dev' ? protocol+'://blog.dev' : protocol+'://peerblog.herokuapp.com';
 		$rootScope.imagePath = $rootScope.appURL +'/img/posts_images/';
 		$rootScope.admin = 'admin.html#';
-
 	}])
 	.controller('PostController', ['$scope', '$http', '$location', '$rootScope', 'paginateSvr', function($scope, $http, $location, $rootScope, paginateSvr){
 		var load = function(){
@@ -27,51 +29,12 @@ angular.module('app.controllers', [])
 
 		load();
 
-		$scope.deletePost = function(index){
-			var e = $scope.posts[index];
-			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
-				.then(function(response){
-					load();
-			});
-		};
-
-		$scope.editPost = function(index){
-			$location.path('/edit/' + $scope.posts[index].Post.id);
-		};
-
 		$scope.viewPost = function(index){
 			$location.path('/' + $scope.posts[index].Post.id);
 		};
 	}])
-	.controller('NewPostController', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
-		console.log('New');
-		/*Image Upload*/
-		var file = {};
-		$scope.uploadFile = function(files) {
-			file = files;
-		};
-
-		$scope.save = function () {
-			$http({
-				method: 'POST',
-				url: $rootScope.appURL + '/posts.json',
-				headers: { 'Content-Type': undefined },
-				transformRequest: function (data) {
-					var formData = new FormData();
-					formData.append("Post", angular.toJson($scope.post));
-					formData.append("file" , file[0]);
-					return formData;
-				},
-				data: { Post: $scope.post, files: $scope.files }
-			}).then(function(response){
-				$location.path('/');
-			});
-		};
-
-		$scope.cancel = function () { $location.path('/'); };
-	}])
 	.controller('EditPostController', ['$scope', '$http', 'routeParams','$location', '$rootScope', function($scope, $http, $routeParams, $location, $rootScope){
-		$http.get($rootScope.appURL + '/posts/' + $routeParams['id'] + '.json')
+		$http.get($rootScope.appURL + '/posts/' + $routeParams.id + '.json')
         	.then(function(data) {
             	$scope.post = data.post.Post;
         });
@@ -89,7 +52,7 @@ angular.module('app.controllers', [])
 	}])
 	.controller('ViewPostController', ['$scope', '$http', '$routeParams','$location', '$rootScope',function($scope, $http, $routeParams, $location, $rootScope){
 		
-		$http.get($rootScope.appURL + '/posts/' + $routeParams['id'] + '.json')
+		$http.get($rootScope.appURL + '/posts/' + $routeParams.id + '.json')
         	.then(function(response) {
             	$scope.Post = response.data.post.Post;
         });
@@ -200,13 +163,15 @@ angular.module('app.controllers', [])
 
 	}])
 	.controller('PostListController', ['$scope', '$http','$location', '$rootScope', 'localStorageService', 'paginateSvr',function($scope, $http, $location, $rootScope, localStorageService, paginateSvr){
-		$http.get($rootScope.appURL + '/users/posts_list.json').
-			then(function(response){
-				$scope.posts = response.data.posts;
-				$scope.paging = response.data.paging;
-			}
-		);
-
+		var load = function(){
+			$http.get($rootScope.appURL + '/users/posts_list.json').
+				then(function(response){
+					$scope.posts = response.data.posts;
+					$scope.paging = response.data.paging;
+				}
+			);
+		};		
+		load();
 		$scope.pageChanged = function () {
 		   	paginateSvr.getData({
 		      	params: {
@@ -217,4 +182,57 @@ angular.module('app.controllers', [])
 				$scope.paging = response.data.paging;
 		   	});
 		};
+
+		$scope.editPost = function(index){
+			$location.path('/edit/' + $scope.posts[index].Post.id);
+		};
+
+		
+		$scope.deletePost = function(index){
+			var e = $scope.posts[index];
+			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
+				.then(function(response){
+					load();
+			});
+		};
+
+		$scope.toggleStatus = function (index) {
+			var e = $scope.posts[index];
+			var _data = {};
+			var status = {1 : 0, 0: 1};
+			_data.Post = {status : status[e.Post.status]};
+			
+			$http.put($rootScope.appURL + '/posts/' + e.Post.id + '.json', _data)
+			.then(function(response){
+				load();
+			});
+		};
+			
+	}])
+	.controller('NewPostController', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
+		/*Image Upload*/
+		var file = {};
+		$scope.uploadFile = function(files) {
+			file = files;
+		};
+
+		$scope.save = function () {
+			$http({
+				method: 'POST',
+				url: $rootScope.appURL + '/posts.json',
+				headers: { 'Content-Type': undefined },
+				transformRequest: function (data) {
+					var formData = new FormData();
+					formData.append("Post", angular.toJson($scope.post));
+					formData.append("file" , file[0]);
+					return formData;
+				},
+				data: { Post: $scope.post, files: $scope.files }
+			}).then(function(response){
+				$location.path('/posts');
+			});
+		};
+
+		$scope.cancel = function () { $location.path('/posts'); };
 	}]);
+}());

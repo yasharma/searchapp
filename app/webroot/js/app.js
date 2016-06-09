@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.services','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
 	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
@@ -26,3 +29,4 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 			redirectTo: '/'
 		});
 	}]);
+}());	

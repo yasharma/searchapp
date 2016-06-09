@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 angular.module('app.services', [])
 	.factory('paginateSvr', ['$rootScope','$http', function ($rootScope,$http) {
 		return {
@@ -7,3 +10,4 @@ angular.module('app.services', [])
 			}	
 		};
 	}]);	
+}());	

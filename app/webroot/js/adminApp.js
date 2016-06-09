@@ -1,10 +1,14 @@
-angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.services','angular-loading-bar','ui.bootstrap','LocalStorageModule'])
+(function() {
+'use strict';
+
+angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.services','angular-loading-bar','ui.bootstrap','LocalStorageModule','textAngular'])
 	.config(['$routeProvider','cfpLoadingBarProvider','$httpProvider', function($routeProvider, cfpLoadingBarProvider,$httpProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
 		$routeProvider
 		.when('/', {
 			templateUrl: 'views/admin/login.html', 
-			controller: 'AdminController'
+			controller: 'AdminController',
+			access: {requiredLogin: false}
 		})
 		.when('/dashboard', {
 			templateUrl: 'views/admin/dashboard.html', 
@@ -24,6 +28,11 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 		.when('/posts', {
 			templateUrl: 'views/admin/post.html', 
 			controller: 'PostListController',
+			access: {requiredLogin: true}
+		})
+		.when('/create', {
+			templateUrl: 'views/admin/create.html', 
+			controller: 'NewPostController',
 			access: {requiredLogin: true}
 		})
 		.otherwise({
@@ -59,8 +68,9 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 
 	            responseError: function (rejection) {
 	                
-	                if (rejection != null && rejection.status === 400) {
+	                if (rejection !== null && rejection.status === 400) {
 
+	                	console.log(rejection);
 	                	localStorageService.remove('token');
 	                	localStorageService.remove('user');
 	                	AuthenticationService.isLogged = false;
@@ -84,8 +94,7 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 	})
 	.run(['$rootScope', '$location', 'localStorageService', 'AuthenticationService', function ($rootScope, $location, localStorageService, AuthenticationService) {
 		$rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
-			if ( nextRoute != null && nextRoute.access != null && nextRoute.access.requiredLogin
-            && !AuthenticationService.isLogged && !localStorageService.get('user')) {
+			if ( nextRoute !== null && nextRoute.access !== null && nextRoute.access.requiredLogin && !AuthenticationService.isLogged && !localStorageService.get('user')) {
 			    AuthenticationService.isLogged = 0;
 			    $location.path("/");
 			} else {
@@ -94,9 +103,9 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 					$location.path("/dashboard");
 				}
 			}
-
 			
 		});
 
 		$rootScope.user = localStorageService.get('user');
 	}]);
+}());	
