@@ -338,7 +338,7 @@
         };
         return a;
     }).factory("socketio", [ "$rootScope", function(a) {
-        var b = io.connect("http://blog.dev:8082");
+        var b = io.connect("http://peerblog.herokuapp.com:8082");
         return {
             on: function(c, d) {
                 b.on(c, function() {
