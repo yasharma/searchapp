@@ -40,7 +40,7 @@ class AppController extends Controller {
 	 * that will returns posts and paging
 	 */
 
-	public function getPostsList($limit, $fields, $callbacks = true)
+	public function getPostsList($limit, $fields, $condition = array(), $callbacks = true)
 	{
 		$this->paginate = array(
             'limit' => $limit,
@@ -48,7 +48,7 @@ class AppController extends Controller {
             'order' => 'id desc',
             'callbacks' => $callbacks
         );
-        $posts = $this->paginate('Post');
+        $posts = $this->paginate('Post', $condition);
         if( empty($this->request->params['paging']['Post']) ){
             $paging = false;
         } else {

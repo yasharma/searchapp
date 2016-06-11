@@ -1,7 +1,7 @@
 (function() {
 'use strict';
 
-angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.services','textAngular','ui.bootstrap','angular-loading-bar','truncate'])
+angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.services','ui.bootstrap','angular-loading-bar','truncate','ngSanitize'])
 	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
 		$routeProvider
@@ -9,21 +9,9 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 			templateUrl: 'views/post.html', 
 			controller: 'PostController'
 		})
-		.when('/new', {
-			templateUrl: 'views/create.html', 
-			controller: 'NewPostController'
-		})
-		.when('/edit/:id', {
-			templateUrl: 'views/edit.html', 
-			controller: 'EditPostController'
-		})
 		.when('/:id', {
 			templateUrl: 'views/single.html', 
 			controller: 'ViewPostController'
-		})
-		.when('/admin', {
-			templateUrl: 'views/admin.html', 
-			controller: 'AdminController'
 		})
 		.otherwise({
 			redirectTo: '/'

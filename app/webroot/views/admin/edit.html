@@ -7,11 +7,11 @@
 			<!-- Horizontal Form -->
 			<div class="box box-purple">
 				<div class="box-header with-border">
-					<h3 class="box-title">Create a New Post</h3>
+					<h3 class="box-title">Edit Post</h3>
 				</div>
 				<!-- /.box-header -->
 				<!-- form start -->
-				<form class="form-horizontal" name="postForm" enctype="multipart/form-data" role="form" ng-submit="save()">
+				<form class="form-horizontal" name="postForm" enctype="multipart/form-data" role="form" ng-submit="updatePost()">
 					<div class="box-body">
 						<div class="form-group">
 							<label for="inputTitle" class="col-sm-2 control-label">Title</label>
@@ -29,7 +29,8 @@
 						</div>
 						<div class="row">
         					<div class="col-xs-8 col-xs-offset-2">
-								<p>--OR--</p>
+        						<img ng-if="post.image != null" class="img-responsive" ng-src="{{ imagePath + post.image }}">
+								<p>--OR-- (Adding a remote url will take precedence and remove the image)</p>
 							</div>
 						</div>		
 						<div class="form-group">
@@ -48,8 +49,8 @@
 					</div>
 					<!-- /.box-body -->
 					<div class="box-footer">
-						<button type="submit" class="btn btn-flat btn-default">Cancel</button>
-						<button type="submit" class="btn btn-flat bg-purple pull-right">Create</button>
+						<button type="cancel()" class="btn btn-flat btn-default">Cancel</button>
+						<button type="submit" class="btn btn-flat bg-purple pull-right">Update</button>
 					</div>
 					<!-- /.box-footer -->
 				</form>

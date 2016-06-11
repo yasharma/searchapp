@@ -55,7 +55,7 @@ angular.module('app.directives', [])
             }]
         };
     })
-    .directive('navMenu', function($location) {
+    .directive('navMenu', ['$location', function($location) {
         return function(scope, element, attrs) {
             var links = element.find('a'),
                 currentLink,
@@ -64,7 +64,7 @@ angular.module('app.directives', [])
 
             for (var i = links.length - 1; i >= 0; i--) {
                 var link = angular.element(links[i]);
-                var url = link.attr('href') !== undefined ? link.attr('href') : link.attr('ng-href');
+                var url = angular.isUndefined(link.attr('href')) ? link.attr('ng-href'): link.attr('href');
                 
                 if (url.substring(0,1) === '#') {
                     urlMap[url.substring(1)] = link;
@@ -76,21 +76,19 @@ angular.module('app.directives', [])
             }
             scope.$on('$routeChangeStart', function() {
                 var path = urlMap[$location.path()];
-
                 links.parent('li').removeClass(activeClass);
-                
                 if (path) {
                     path.parent('li').addClass(activeClass);
                 }
             });
         };
-    })
-    .directive('setHeight', function($window){
-      return{
-        restrict:'A',
-        link: function(scope, element, attrs){
-            element.css('min-height', ($window.innerHeight - 50) + 'px');
-        }
-      };
-    });
+    }])
+    .directive('setHeight', ['$window', function($window){
+        return{
+            restrict:'A',
+            link: function(scope, element, attrs){
+                element.css('min-height', ($window.innerHeight - 50) + 'px');
+            }
+        };
+    }]);
 }());

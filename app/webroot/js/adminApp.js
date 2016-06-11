@@ -35,6 +35,11 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 			controller: 'NewPostController',
 			access: {requiredLogin: true}
 		})
+		.when('/edit/:id', {
+			templateUrl: 'views/admin/edit.html', 
+			controller: 'EditPostController',
+			access: {requiredLogin: true}
+		})
 		.otherwise({
 			redirectTo: '/'
 		});
@@ -85,13 +90,6 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
     	$httpProvider.interceptors.push(interceptor);
 
 	}])
-	.factory('AuthenticationService', function () {
-	    var auth = {
-	        isLogged: false
-	    };
-
-	    return auth;
-	})
 	.run(['$rootScope', '$location', 'localStorageService', 'AuthenticationService', function ($rootScope, $location, localStorageService, AuthenticationService) {
 		$rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
 			if ( nextRoute !== null && nextRoute.access !== null && !nextRoute.access.requiredLogin && !AuthenticationService.isLogged && !localStorageService.get('user')) {
@@ -105,7 +103,6 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 			}
 			
 		});
-
 		$rootScope.user = localStorageService.get('user');
 	}]);
 }());	

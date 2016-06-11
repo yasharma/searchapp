@@ -17,13 +17,15 @@ class Post extends AppModel {
 	}
 
 	public function beforeSave($options = array()) {
-	    
         if (isset($this->data['Post']['created']) && isset($this->data['Post']['id'])) {
             unset($this->data['Post']['created'] );
         }
 	    if(!empty($_FILES['file']['name'])){
 	    	$this->data['Post']['image'] = $this->_uploadFile($_FILES['file']);
 	    }
+	    if(!empty($this->data['Post']['image_url'])){
+	    	$this->data['Post']['image'] = null;
+		}
 	    return true;
 	}
 

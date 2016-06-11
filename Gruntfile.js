@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 	  				'bower_components/bootstrap/dist/css/bootstrap.min.css',
 	  				'bower_components/textAngular/dist/textAngular.css',
 	  				'bower_components/font-awesome/css/font-awesome.min.css',
-	  				'bower_components/ionicons/css/ionicons.min.css',
+	  				'bower_components/Ionicons/css/ionicons.min.css',
 	  				'bower_components/AdminLTE/dist/css/AdminLTE.min.css',
 	  				'bower_components/AdminLTE/dist/css/skins/skin-purple.min.css'
   				]  
@@ -69,7 +69,8 @@ module.exports = function(grunt) {
 					'app/webroot/js/adminApp.js',
 					'app/webroot/js/controllers.js',
 					'app/webroot/js/directives.js',
-					'app/webroot/js/filters.js'
+					'app/webroot/js/filters.js',
+					'app/webroot/js/services.js'
 				]
 			}
 		}

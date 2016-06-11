@@ -9,7 +9,7 @@ class PostsController extends AppController {
     }
 
 	public function index() {
-        $this->getPostsList(10, array('id', 'title', 'image','created'));
+        $this->getPostsList(10, array('id', 'title', 'status','image','image_url','created'), array('Post.status' => 1));
 	}
 	public function view($id) {
         $post = $this->Post->findById($id);
