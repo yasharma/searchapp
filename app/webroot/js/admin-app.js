@@ -76,17 +76,17 @@
     } ]);
 }(), function() {
     "use strict";
-    angular.module("app.controllers", []).controller("AppController", [ "$scope", "$http", "$location", "$rootScope", "socketio", function(a, b, c, d, e) {
-        var f = c.protocol();
-        d.appURL = "blog.dev" === c.host() ? f + "://blog.dev" : f + "://peerblog.herokuapp.com", 
+    angular.module("app.controllers", []).controller("AppController", [ "$scope", "$http", "$location", "$rootScope", function(a, b, c, d) {
+        var e = c.protocol();
+        d.appURL = "blog.dev" === c.host() ? e + "://blog.dev" : e + "://peerblog.herokuapp.com", 
         d.imagePath = d.appURL + "/img/posts_images/", d.admin = "admin.html#";
-    } ]).controller("PostController", [ "$scope", "$location", "paginateSvr", "socketio", "postSvr", function(a, b, c, d, e) {
-        var f = function() {
-            e.get().then(function(b) {
+    } ]).controller("PostController", [ "$scope", "$location", "paginateSvr", "postSvr", function(a, b, c, d) {
+        var e = function() {
+            d.get().then(function(b) {
                 a.posts = b.posts, a.paging = b.paging;
             });
         };
-        f(), a.pageChanged = function() {
+        e(), a.pageChanged = function() {
             c.getData({
                 params: {
                     page: a.paging.page
@@ -120,7 +120,7 @@
                 });
             }
         };
-    } ]).controller("DashboardController", [ "$scope", "$http", "$rootScope", "$location", "$timeout", "socketio", function(a, b, c, d, e, f) {
+    } ]).controller("DashboardController", [ "$scope", "$http", "$rootScope", "$location", "$timeout", function(a, b, c, d, e) {
         b.get(c.appURL + "/users.json").then(function(b) {
             a.Post = b.data.posts;
         }), e(function() {
@@ -159,15 +159,15 @@
                 };
             }
         };
-    } ]).controller("PostListController", [ "$scope", "$http", "$location", "$rootScope", "localStorageService", "paginateSvr", "socketio", "postSvr", function(a, b, c, d, e, f, g, h) {
-        var i = function() {
-            h.get({
+    } ]).controller("PostListController", [ "$scope", "$http", "$location", "$rootScope", "localStorageService", "paginateSvr", "postSvr", function(a, b, c, d, e, f, g) {
+        var h = function() {
+            g.get({
                 apiUrl: "/users/posts_list.json"
             }).then(function(b) {
                 a.posts = b.posts, a.paging = b.paging;
             });
         };
-        i(), a.pageChanged = function() {
+        h(), a.pageChanged = function() {
             f.getData({
                 params: {
                     page: a.paging.page,
@@ -181,7 +181,7 @@
         }, a.deletePost = function(c) {
             var e = a.posts[c];
             b["delete"](d.appURL + "/posts/" + e.Post.id + ".json").then(function(a) {
-                i();
+                h();
             });
         }, a.toggleStatus = function(c) {
             var e = a.posts[c], f = {}, g = {
@@ -191,13 +191,13 @@
             f.Post = {
                 status: g[e.Post.status]
             }, b.put(d.appURL + "/posts/" + e.Post.id + ".json", f).then(function(a) {
-                i();
+                h();
             });
         };
-    } ]).controller("NewPostController", [ "$scope", "$http", "$location", "$rootScope", "socketio", function(a, b, c, d, e) {
-        var f = {};
+    } ]).controller("NewPostController", [ "$scope", "$http", "$location", "$rootScope", function(a, b, c, d) {
+        var e = {};
         a.uploadFile = function(a) {
-            f = a;
+            e = a;
         }, a.save = function() {
             b({
                 method: "POST",
@@ -207,7 +207,7 @@
                 },
                 transformRequest: function(b) {
                     var c = new FormData();
-                    return c.append("Post", angular.toJson(a.post)), c.append("file", f[0]), c;
+                    return c.append("Post", angular.toJson(a.post)), c.append("file", e[0]), c;
                 },
                 data: {
                     Post: a.post,
@@ -219,13 +219,13 @@
         }, a.cancel = function() {
             c.path("/posts");
         };
-    } ]).controller("EditPostController", [ "$scope", "$http", "$routeParams", "$location", "$rootScope", "socketio", function(a, b, c, d, e, f) {
+    } ]).controller("EditPostController", [ "$scope", "$http", "$routeParams", "$location", "$rootScope", function(a, b, c, d, e) {
         b.get(e.appURL + "/posts/" + c.id + ".json").then(function(b) {
             a.post = b.data.post.Post;
         });
-        var g = {};
+        var f = {};
         a.uploadFile = function(a) {
-            g = a;
+            f = a;
         }, a.updatePost = function() {
             b({
                 method: "POST",
@@ -235,7 +235,7 @@
                 },
                 transformRequest: function(b) {
                     var c = new FormData();
-                    return c.append("Post", angular.toJson(a.post)), c.append("file", g[0]), c;
+                    return c.append("Post", angular.toJson(a.post)), c.append("file", f[0]), c;
                 },
                 data: {
                     Post: a.post,

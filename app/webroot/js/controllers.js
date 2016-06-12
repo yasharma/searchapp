@@ -2,13 +2,13 @@
 	'use strict';
 
 	angular.module('app.controllers', [])
-	.controller('AppController', ['$scope', '$http', '$location', '$rootScope', 'socketio',function($scope, $http, $location, $rootScope, socketio){
+	.controller('AppController', ['$scope', '$http', '$location', '$rootScope',function($scope, $http, $location, $rootScope){
 		var protocol = $location.protocol();
 		$rootScope.appURL = $location.host() === 'blog.dev' ? protocol+'://blog.dev' : protocol+'://peerblog.herokuapp.com';
 		$rootScope.imagePath = $rootScope.appURL +'/img/posts_images/';
 		$rootScope.admin = 'admin.html#';
 	}])
-	.controller('PostController', ['$scope', '$location', 'paginateSvr', 'socketio', 'postSvr' ,function($scope, $location, paginateSvr, socketio, postSvr){
+	.controller('PostController', ['$scope', '$location', 'paginateSvr', 'postSvr' ,function($scope, $location, paginateSvr, postSvr){
 		var load = function(){
 			postSvr.get().then(function(response){
 				$scope.posts = response.posts;
@@ -77,7 +77,7 @@
 			);
 		};	
 	}])
-	.controller('DashboardController', ['$scope', '$http', '$rootScope', '$location', '$timeout', 'socketio',function($scope, $http, $rootScope, $location,$timeout,socketio){
+	.controller('DashboardController', ['$scope', '$http', '$rootScope', '$location', '$timeout',function($scope, $http, $rootScope, $location,$timeout){
 		$http.get($rootScope.appURL + '/users.json').
 			then(function(response){
 				$scope.Post = response.data.posts;
@@ -149,7 +149,7 @@
 			}
 		};
 	}])
-	.controller('PostListController', ['$scope', '$http','$location', '$rootScope', 'localStorageService', 'paginateSvr','socketio','postSvr', function($scope, $http, $location, $rootScope, localStorageService, paginateSvr, socketio, postSvr){
+	.controller('PostListController', ['$scope', '$http','$location', '$rootScope', 'localStorageService', 'paginateSvr','postSvr', function($scope, $http, $location, $rootScope, localStorageService, paginateSvr, postSvr){
 		var load = function(){
 			postSvr.get({apiUrl: '/users/posts_list.json'}).then(function(response){
 				$scope.posts = response.posts;
@@ -196,7 +196,7 @@
 			});
 		};
 	}])
-	.controller('NewPostController', ['$scope', '$http', '$location', '$rootScope', 'socketio',function($scope, $http, $location, $rootScope,socketio){
+	.controller('NewPostController', ['$scope', '$http', '$location', '$rootScope',function($scope, $http, $location, $rootScope){
 		/*Image Upload*/
 		var file = {};
 		$scope.uploadFile = function(files) {
@@ -223,7 +223,7 @@
 
 		$scope.cancel = function () { $location.path('/posts'); };
 	}])
-	.controller('EditPostController', ['$scope', '$http', '$routeParams','$location', '$rootScope', 'socketio',function($scope, $http, $routeParams, $location, $rootScope, socketio){
+	.controller('EditPostController', ['$scope', '$http', '$routeParams','$location', '$rootScope',function($scope, $http, $routeParams, $location, $rootScope){
 		$http.get($rootScope.appURL + '/posts/' + $routeParams.id + '.json')
         	.then(function(response) {
             	$scope.post = response.data.post.Post;
