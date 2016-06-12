@@ -16,9 +16,9 @@
 			});
 		};
 		
-		socketio.on('new.post.created', function(){
+		/*socketio.on('new.post.created', function(){
 			load();
-		});
+		});*/
 
 		/* Fetching all posts when first comes to page */
 		load();
@@ -179,7 +179,7 @@
 			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
 				.then(function(response){
 					load();
-					socketio.emit('new_post');
+					//socketio.emit('new_post');
 			});
 		};
 
@@ -191,7 +191,7 @@
 			
 			$http.put($rootScope.appURL + '/posts/' + e.Post.id + '.json', _data)
 			.then(function(response){
-				socketio.emit('new.post.created');
+				//socketio.emit('new.post.created');
 				load();
 			});
 		};
@@ -216,7 +216,7 @@
 				},
 				data: { Post: $scope.post, files: $scope.files }
 			}).then(function(response){
-				socketio.emit('new.post.created');
+				//socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};
@@ -248,7 +248,7 @@
 				},
 				data: { Post: $scope.post, files: $scope.files }
 			}).then(function(response){
-				socketio.emit('new.post.created');
+				//socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};

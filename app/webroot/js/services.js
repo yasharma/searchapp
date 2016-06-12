@@ -24,7 +24,7 @@ angular.module('app.services', [])
 	    return auth;
 	})
 	.factory('socketio', ['$rootScope', function ($rootScope) {
-		var socket = io.connect('http://peerblog.herokuapp.com:8082');
+		var socket = io.connect('http://blog.dev:8082');
 		return {
 			on: function (eventName, callback) {
 				socket.on(eventName, function () {  

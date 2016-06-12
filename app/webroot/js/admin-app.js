@@ -86,9 +86,7 @@
                 a.posts = b.posts, a.paging = b.paging;
             });
         };
-        d.on("new.post.created", function() {
-            f();
-        }), f(), a.pageChanged = function() {
+        f(), a.pageChanged = function() {
             c.getData({
                 params: {
                     page: a.paging.page
@@ -183,17 +181,17 @@
         }, a.deletePost = function(c) {
             var e = a.posts[c];
             b["delete"](d.appURL + "/posts/" + e.Post.id + ".json").then(function(a) {
-                i(), g.emit("new_post");
+                i();
             });
         }, a.toggleStatus = function(c) {
-            var e = a.posts[c], f = {}, h = {
+            var e = a.posts[c], f = {}, g = {
                 1: 0,
                 0: 1
             };
             f.Post = {
-                status: h[e.Post.status]
+                status: g[e.Post.status]
             }, b.put(d.appURL + "/posts/" + e.Post.id + ".json", f).then(function(a) {
-                g.emit("new.post.created"), i();
+                i();
             });
         };
     } ]).controller("NewPostController", [ "$scope", "$http", "$location", "$rootScope", "socketio", function(a, b, c, d, e) {
@@ -216,7 +214,7 @@
                     files: a.files
                 }
             }).then(function(a) {
-                e.emit("new.post.created"), c.path("/posts");
+                c.path("/posts");
             });
         }, a.cancel = function() {
             c.path("/posts");
@@ -244,7 +242,7 @@
                     files: a.files
                 }
             }).then(function(a) {
-                f.emit("new.post.created"), d.path("/posts");
+                d.path("/posts");
             });
         }, a.cancel = function() {
             d.path("/dashboard");
@@ -338,7 +336,7 @@
         };
         return a;
     }).factory("socketio", [ "$rootScope", function(a) {
-        var b = io.connect("http://peerblog.herokuapp.com:8082");
+        var b = io.connect("http://blog.dev:8082");
         return {
             on: function(c, d) {
                 b.on(c, function() {
