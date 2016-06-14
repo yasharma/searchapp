@@ -1,1 +1,1 @@
-web: node app.js vendor/bin/heroku-php-nginx -C nginx_app.conf app/webroot/
+web: node server.js vendor/bin/heroku-php-nginx -C nginx_app.conf app/webroot/
