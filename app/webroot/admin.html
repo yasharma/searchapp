@@ -23,7 +23,7 @@
         <div ng-if="user != null" admin-header></div>
         <div ng-if="user != null" admin-sidebar></div>
         <div ng-class="{'content-wrapper': user != null}" set-height>
-            <div ng-show="Message.type == 'error' || Message.type == 'success'" ng-class="{'alert alert-danger': Message.type == 'error', 'alert alert-success': Message.type == 'success'}">
+            <div ng-if="Message.type == 'error' || Message.type == 'success'" ng-class="{'alert alert-danger': Message.type == 'error', 'alert alert-success': Message.type == 'success'}">
                 {{Message.text}}
             </div>
             <div ng-view></div>
@@ -31,7 +31,7 @@
     </div>
     
     <script src="js/lib.min.js"></script>
-    <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="js/admin-app.js"></script>
 </body>
 </html>

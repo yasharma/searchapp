@@ -8,7 +8,7 @@
 		$rootScope.imagePath = $rootScope.appURL +'/img/posts_images/';
 		$rootScope.admin = 'admin.html#';
 	}])
-	.controller('PostController', ['$scope', '$location', 'paginateSvr', 'postSvr' ,function($scope, $location, paginateSvr, postSvr){
+	.controller('PostController', ['$scope', '$location', 'paginateSvr', 'postSvr' ,'socketio', function($scope, $location, paginateSvr, postSvr, socketio){
 		var load = function(){
 			postSvr.get().then(function(response){
 				$scope.posts = response.posts;
@@ -16,9 +16,9 @@
 			});
 		};
 		
-		/*socketio.on('new.post.created', function(){
+		socketio.on('new.post.created', function(){
 			load();
-		});*/
+		});
 
 		/* Fetching all posts when first comes to page */
 		load();
@@ -149,7 +149,7 @@
 			}
 		};
 	}])
-	.controller('PostListController', ['$scope', '$http','$location', '$rootScope', 'localStorageService', 'paginateSvr','postSvr', function($scope, $http, $location, $rootScope, localStorageService, paginateSvr, postSvr){
+	.controller('PostListController', ['$scope', '$http','$location', '$rootScope', 'localStorageService', 'paginateSvr','postSvr', 'socketio',function($scope, $http, $location, $rootScope, localStorageService, paginateSvr, postSvr, socketio){
 		var load = function(){
 			postSvr.get({apiUrl: '/users/posts_list.json'}).then(function(response){
 				$scope.posts = response.posts;
@@ -179,7 +179,7 @@
 			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
 				.then(function(response){
 					load();
-					//socketio.emit('new_post');
+					socketio.emit('new_post');
 			});
 		};
 
@@ -191,12 +191,12 @@
 			
 			$http.put($rootScope.appURL + '/posts/' + e.Post.id + '.json', _data)
 			.then(function(response){
-				//socketio.emit('new.post.created');
+				socketio.emit('new.post.created');
 				load();
 			});
 		};
 	}])
-	.controller('NewPostController', ['$scope', '$http', '$location', '$rootScope',function($scope, $http, $location, $rootScope){
+	.controller('NewPostController', ['$scope', '$http', '$location', '$rootScope', 'socketio', function($scope, $http, $location, $rootScope, socketio){
 		/*Image Upload*/
 		var file = {};
 		$scope.uploadFile = function(files) {
@@ -216,14 +216,14 @@
 				},
 				data: { Post: $scope.post, files: $scope.files }
 			}).then(function(response){
-				//socketio.emit('new.post.created');
+				socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};
 
 		$scope.cancel = function () { $location.path('/posts'); };
 	}])
-	.controller('EditPostController', ['$scope', '$http', '$routeParams','$location', '$rootScope',function($scope, $http, $routeParams, $location, $rootScope){
+	.controller('EditPostController', ['$scope', '$http', '$routeParams','$location', '$rootScope', 'socketio', function($scope, $http, $routeParams, $location, $rootScope, socketio){
 		$http.get($rootScope.appURL + '/posts/' + $routeParams.id + '.json')
         	.then(function(response) {
             	$scope.post = response.data.post.Post;
@@ -248,7 +248,7 @@
 				},
 				data: { Post: $scope.post, files: $scope.files }
 			}).then(function(response){
-				//socketio.emit('new.post.created');
+				socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};

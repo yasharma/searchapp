@@ -6,6 +6,6 @@ a:hover, a:active, a:focus{color: #514E8F; }
 .nav-tabs-custom>.nav-tabs>li.active, .box.box-purple{ border-top-color: #605ca8; }
 .nav-tabs-custom .nav-tabs h4.tab-title{ margin-top: 0; margin-bottom: 0;}
 .alert { border-radius: 0;  }
-#loading-bar .bar { background: #9895C6;  }
+#loading-bar .bar { background: #1A2226;  }
 .post-list-header > h1{margin: 0; font-size: 24px; } 
 .pagination{ margin: 0; }

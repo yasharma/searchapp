@@ -80,13 +80,15 @@
         var e = c.protocol();
         d.appURL = "blog.dev" === c.host() ? e + "://blog.dev" : e + "://peerblog.herokuapp.com", 
         d.imagePath = d.appURL + "/img/posts_images/", d.admin = "admin.html#";
-    } ]).controller("PostController", [ "$scope", "$location", "paginateSvr", "postSvr", function(a, b, c, d) {
-        var e = function() {
+    } ]).controller("PostController", [ "$scope", "$location", "paginateSvr", "postSvr", "socketio", function(a, b, c, d, e) {
+        var f = function() {
             d.get().then(function(b) {
                 a.posts = b.posts, a.paging = b.paging;
             });
         };
-        e(), a.pageChanged = function() {
+        e.on("new.post.created", function() {
+            f();
+        }), f(), a.pageChanged = function() {
             c.getData({
                 params: {
                     page: a.paging.page
@@ -159,15 +161,15 @@
                 };
             }
         };
-    } ]).controller("PostListController", [ "$scope", "$http", "$location", "$rootScope", "localStorageService", "paginateSvr", "postSvr", function(a, b, c, d, e, f, g) {
-        var h = function() {
+    } ]).controller("PostListController", [ "$scope", "$http", "$location", "$rootScope", "localStorageService", "paginateSvr", "postSvr", "socketio", function(a, b, c, d, e, f, g, h) {
+        var i = function() {
             g.get({
                 apiUrl: "/users/posts_list.json"
             }).then(function(b) {
                 a.posts = b.posts, a.paging = b.paging;
             });
         };
-        h(), a.pageChanged = function() {
+        i(), a.pageChanged = function() {
             f.getData({
                 params: {
                     page: a.paging.page,
@@ -181,7 +183,7 @@
         }, a.deletePost = function(c) {
             var e = a.posts[c];
             b["delete"](d.appURL + "/posts/" + e.Post.id + ".json").then(function(a) {
-                h();
+                i(), h.emit("new_post");
             });
         }, a.toggleStatus = function(c) {
             var e = a.posts[c], f = {}, g = {
@@ -191,45 +193,17 @@
             f.Post = {
                 status: g[e.Post.status]
             }, b.put(d.appURL + "/posts/" + e.Post.id + ".json", f).then(function(a) {
-                h();
+                h.emit("new.post.created"), i();
             });
         };
-    } ]).controller("NewPostController", [ "$scope", "$http", "$location", "$rootScope", function(a, b, c, d) {
-        var e = {};
+    } ]).controller("NewPostController", [ "$scope", "$http", "$location", "$rootScope", "socketio", function(a, b, c, d, e) {
+        var f = {};
         a.uploadFile = function(a) {
-            e = a;
+            f = a;
         }, a.save = function() {
             b({
                 method: "POST",
                 url: d.appURL + "/posts.json",
-                headers: {
-                    "Content-Type": void 0
-                },
-                transformRequest: function(b) {
-                    var c = new FormData();
-                    return c.append("Post", angular.toJson(a.post)), c.append("file", e[0]), c;
-                },
-                data: {
-                    Post: a.post,
-                    files: a.files
-                }
-            }).then(function(a) {
-                c.path("/posts");
-            });
-        }, a.cancel = function() {
-            c.path("/posts");
-        };
-    } ]).controller("EditPostController", [ "$scope", "$http", "$routeParams", "$location", "$rootScope", function(a, b, c, d, e) {
-        b.get(e.appURL + "/posts/" + c.id + ".json").then(function(b) {
-            a.post = b.data.post.Post;
-        });
-        var f = {};
-        a.uploadFile = function(a) {
-            f = a;
-        }, a.updatePost = function() {
-            b({
-                method: "POST",
-                url: e.appURL + "/posts.json",
                 headers: {
                     "Content-Type": void 0
                 },
@@ -242,7 +216,35 @@
                     files: a.files
                 }
             }).then(function(a) {
-                d.path("/posts");
+                e.emit("new.post.created"), c.path("/posts");
+            });
+        }, a.cancel = function() {
+            c.path("/posts");
+        };
+    } ]).controller("EditPostController", [ "$scope", "$http", "$routeParams", "$location", "$rootScope", "socketio", function(a, b, c, d, e, f) {
+        b.get(e.appURL + "/posts/" + c.id + ".json").then(function(b) {
+            a.post = b.data.post.Post;
+        });
+        var g = {};
+        a.uploadFile = function(a) {
+            g = a;
+        }, a.updatePost = function() {
+            b({
+                method: "POST",
+                url: e.appURL + "/posts.json",
+                headers: {
+                    "Content-Type": void 0
+                },
+                transformRequest: function(b) {
+                    var c = new FormData();
+                    return c.append("Post", angular.toJson(a.post)), c.append("file", g[0]), c;
+                },
+                data: {
+                    Post: a.post,
+                    files: a.files
+                }
+            }).then(function(a) {
+                f.emit("new.post.created"), d.path("/posts");
             });
         }, a.cancel = function() {
             d.path("/dashboard");
