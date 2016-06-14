@@ -23,8 +23,8 @@ angular.module('app.services', [])
 
 	    return auth;
 	})
-	.factory('socketio', ['$rootScope', function ($rootScope) {
-		var socket = io.connect('http://blog.dev:8082');
+	.factory('socketio', ['$rootScope', '$location',function ($rootScope, $location) {
+		var socket = io.connect('http://'+ $location.host() +':8082');
 		return {
 			on: function (eventName, callback) {
 				socket.on(eventName, function () {  

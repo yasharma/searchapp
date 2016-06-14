@@ -337,22 +337,22 @@
             isLogged: !1
         };
         return a;
-    }).factory("socketio", [ "$rootScope", function(a) {
-        var b = io.connect("http://blog.dev:8082");
+    }).factory("socketio", [ "$rootScope", "$location", function(a, b) {
+        var c = io.connect("http://" + b.host() + ":8082");
         return {
-            on: function(c, d) {
-                b.on(c, function() {
-                    var c = arguments;
+            on: function(b, d) {
+                c.on(b, function() {
+                    var b = arguments;
                     a.$apply(function() {
-                        d.apply(b, c);
+                        d.apply(c, b);
                     });
                 });
             },
-            emit: function(c, d, e) {
-                b.emit(c, d, function() {
-                    var c = arguments;
+            emit: function(b, d, e) {
+                c.emit(b, d, function() {
+                    var b = arguments;
                     a.$apply(function() {
-                        e && e.apply(b, c);
+                        e && e.apply(c, b);
                     });
                 });
             }
