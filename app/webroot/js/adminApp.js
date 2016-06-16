@@ -40,6 +40,21 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 			controller: 'EditPostController',
 			access: {requiredLogin: true}
 		})
+		.when('/category', {
+			templateUrl: 'views/admin/categories.html',
+			controller: 'CategoryController',
+			access: {requiredLogin: true}
+		})
+		.when('/create-category', {
+			templateUrl: 'views/admin/create_categories.html',
+			controller: 'NewCategoryController',
+			access: {requiredLogin: true}
+		})
+		.when('/edit-category/:id', {
+			templateUrl: 'views/admin/create_categories.html',
+			controller: 'EditCategoryController',
+			access: {requiredLogin: true}
+		})
 		.otherwise({
 			redirectTo: '/'
 		});
@@ -47,18 +62,18 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 		// Enable CORS
 		$httpProvider.defaults.useXDomain = true;
     	delete $httpProvider.defaults.headers.common['X-Requested-With'];
-		var interceptor = ['$q', '$window', '$rootScope', 'localStorageService', 'AuthenticationService', function ($q, $window, $rootScope, localStorageService, AuthenticationService) {
+		var interceptor = ['$q', '$window', '$rootScope', 'localStorageService', 'AuthenticationService', 'mapUrlExt','$timeout',function ($q, $window, $rootScope, localStorageService, AuthenticationService, mapUrlExt, $timeout) {
 
 	        return {
 	        	request: function (config) {
-		           config.headers = config.headers || {};
-		           var token = localStorageService.get('token');
-		           if (token) {
+		           	config.headers = config.headers || {};
+		           	var token = localStorageService.get('token');
+		           	if (token) {
 		               	config.headers.token = token;
 		               	AuthenticationService.isLogged = 1;
 	                    $rootScope.isLogged = 1;
-		           }
-		           return config;
+		           	}
+		           	return config;
 		       	},
 
 	            requestError: function (rejection) {
@@ -66,6 +81,11 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 	            },
 
 	            response: function (response) {
+	                
+	                $timeout(function () { 
+	                	$rootScope.Message = {type: 'fade'};
+	                }, 5000);	
+
 	                return response || $q.when(response);
 	            },
 
@@ -90,9 +110,9 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
     	$httpProvider.interceptors.push(interceptor);
 
 	}])
-	.run(['$rootScope', '$location', 'localStorageService', 'AuthenticationService', function ($rootScope, $location, localStorageService, AuthenticationService) {
+	.run(['$rootScope', '$location', 'localStorageService', 'AuthenticationService',function ($rootScope, $location, localStorageService, AuthenticationService) {
 		$rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
-			if ( nextRoute !== null && nextRoute.access !== null && !nextRoute.access.requiredLogin && !AuthenticationService.isLogged && !localStorageService.get('user')) {
+			if ( nextRoute !== null && nextRoute.access !== null && nextRoute.access.requiredLogin && !AuthenticationService.isLogged && !localStorageService.get('user')) {
 			    AuthenticationService.isLogged = 0;
 			    $location.path("/");
 			} else {

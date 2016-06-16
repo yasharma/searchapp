@@ -43,8 +43,8 @@ class UsersController extends AppController {
 	public function index() {
         $posts = $this->Post->find('count');
 		$this->set(array(
-            'posts' => $posts,
-            '_serialize' => array('posts')
+            'records' => $posts,
+            '_serialize' => array('records')
         ));
 	}
 
@@ -86,11 +86,11 @@ class UsersController extends AppController {
 	}
 
 	public function view($id = null) {
-		if (!$this->User->exists($id)) {
-			throw new NotFoundException(__('Invalid user'));
-		}
-		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
-		$this->set('user', $this->User->find('first', $options));
+		$user = $this->User->findById($id);
+        $this->set(array(
+            'record' => $user,
+            '_serialize' => array('record')
+        ));
 	}
 
 	public function add() {
@@ -112,18 +112,15 @@ class UsersController extends AppController {
 	                'text' => __('Account information updated successfully'),
 	                'type' => 'success'
 	            );
-	            $user = $this->data['User'];
 			}
 		} else {
 			$message = array(
                 'text' => __('Error on saving data'),
                 'type' => 'error'
             );
-            $user = null;
 		}
 		$this->set(array(
             'message' => $message,
-            'user' => $user,
             '_serialize' => array('message','user')
         ));
 	}
@@ -159,6 +156,6 @@ class UsersController extends AppController {
 
 	public function posts_list()
 	{
-		$this->getPostsList(20, array('id', 'title', 'status','created'), [],false);	
+		$this->getList('Post', 20, array('id', 'title', 'status','created'), [],false);	
 	}	
 }

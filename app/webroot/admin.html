@@ -9,6 +9,7 @@
     <!-- AngularJS loading bar -->
     <link href="css/site.min.css" rel="stylesheet">
     <link href="css/admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,15 +24,13 @@
         <div ng-if="user != null" admin-header></div>
         <div ng-if="user != null" admin-sidebar></div>
         <div ng-class="{'content-wrapper': user != null}" set-height>
-            <div ng-show="Message.type == 'error' || Message.type == 'success'" ng-class="{'alert alert-danger': Message.type == 'error', 'alert alert-success': Message.type == 'success'}">
-                {{Message.text}}
-            </div>
+            <div ng-bind="Message.text" ng-show="Message.type == 'error' || Message.type == 'success'" ng-class="{'alert alert-danger fade in ': Message.type == 'error', 'alert alert-success fade in ': Message.type == 'success', 'fade':Message.type == 'fade'}"></div>
             <div ng-view></div>
         </div>    
     </div>
     
     <script src="js/lib.min.js"></script>
-    <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="js/admin-app.js"></script>
 </body>
 </html>

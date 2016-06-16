@@ -9,13 +9,14 @@ class PostsController extends AppController {
     }
 
 	public function index() {
-        $this->getPostsList(10, array('id', 'title', 'status','image','image_url','created'), array('Post.status' => 1));
+        $this->getList('Post', 10, array('id', 'title', 'status','image','image_url','created'), array('Post.status' => 1));
 	}
+    
 	public function view($id) {
         $post = $this->Post->findById($id);
         $this->set(array(
-            'post' => $post,
-            '_serialize' => array('post')
+            'record' => $post,
+            '_serialize' => array('record')
         ));
     }
 

@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.services','ui.bootstrap','angular-loading-bar','truncate','ngSanitize'])
-	.config(['$routeProvider','cfpLoadingBarProvider','$locationProvider', function($routeProvider, cfpLoadingBarProvider){
+	.config(['$routeProvider','cfpLoadingBarProvider', function($routeProvider, cfpLoadingBarProvider){
 		cfpLoadingBarProvider.includeSpinner = false;
 		$routeProvider
 		.when('/', {

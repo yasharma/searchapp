@@ -1,10 +1,10 @@
 <section class="content-header">
 	<div class="row">
 		<div class="col-md-6 post-list-header">
-			<h1>Posts Management</h1>	
+			<h1>Category Management</h1>	
 		</div>
 		<div class="col-md-6">
-			<a ng-href="{{admin}}/create" class="btn btn-flat bg-purple pull-right">Create Post</a>
+			<a ng-href="{{admin}}/create-category" class="btn btn-flat bg-purple pull-right">New Category</a>
 		</div>
 	</div>
 </section>	
@@ -16,31 +16,33 @@
 				<div class="box-body table-responsive no-padding">
 					<table class="table table-hover">
 						<tr>
-							<th>Title</th>
+							<th>Category Name</th>
+							<th>Posts</th>
 							<th>Date</th>
 							<th>Status</th>
 							<th>Action</th>
 						</tr>
-						<tr ng-repeat="e in posts">
-							<td>{{e.Post.title}}</td>
-							<td>{{e.Post.created}}</td>
-							<td><span ng-class="{'label label-success': e.Post.status == 1, 'label label-danger': e.Post.status == 0}">{{ e.Post.status == 1 ? 'Active':'In-Active' }}</span></td>
+						<tr ng-repeat="e in categories">
+							<td>{{e.Category.name}}</td>
+							<td><span class="badge">{{e.Category.post_count == null ? 0 : e.Category.post_count}}</span></td>
+							<td>{{e.Category.created}}</td>
+							<td><span ng-class="{'label label-success': e.Category.status == 1, 'label label-danger': e.Category.status == 0}">{{ e.Category.status == 1 ? 'Active':'In-Active' }}</span></td>
 							<td>
 								<div class="btn-group btn-group-sm" role="group" aria-label="...">
-									<button type="button" ng-click=editPost($index) class="btn btn-flat btn-default" data-toggle="tooltip" data-placement="top" title="Edit">
+									<button type="button" ng-click=editCategory($index) class="btn btn-flat btn-default" data-toggle="tooltip" data-placement="top" title="Edit">
 										<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 									</button>
 									<button type="button" ng-click=toggleStatus($index) class="btn btn-flat btn-default" data-toggle="tooltip" data-placement="top" title="Status">
-										<i ng-class="{'fa fa-check-circle': e.Post.status == 1, 'fa fa-minus-circle': e.Post.status == 0}" aria-hidden="true"></i>
+										<i ng-class="{'fa fa-check-circle': e.Category.status == 1, 'fa fa-minus-circle': e.Category.status == 0}" aria-hidden="true"></i>
 									</button>
-									<button type="button" ng-click=deletePost($index) class="btn btn-flat btn-default" data-toggle="tooltip" data-placement="top" title="Delete">
+									<button type="button" ng-click=deleteCategory($index) class="btn btn-flat btn-default" data-toggle="tooltip" data-placement="top" title="Delete">
 										<i class="fa fa-trash" aria-hidden="true"></i>
 									</button>
 								</div>
 							</td>
 						</tr>
-						<tr ng-if="posts.length == 0">
-							<td class="text-center" colspan="4">No Posts Found</td>
+						<tr ng-if="categories.length == 0">
+							<td class="text-center" colspan="5">No Categories Found</td>
 						</tr>
 					</table>
 				</div>

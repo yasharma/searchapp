@@ -36,11 +36,11 @@ class AppController extends Controller {
 	}
 
 	/**
-	 * Common function for both users and posts controllers
-	 * that will returns posts and paging
+	 * Common function for both users, categories and posts controllers
+	 * that will returns data and paging
 	 */
 
-	public function getPostsList($limit, $fields, $condition = array(), $callbacks = true)
+	public function getList($model, $limit, $fields, $condition = array(), $callbacks = true)
 	{
 		$this->paginate = array(
             'limit' => $limit,
@@ -48,16 +48,17 @@ class AppController extends Controller {
             'order' => 'id desc',
             'callbacks' => $callbacks
         );
-        $posts = $this->paginate('Post', $condition);
-        if( empty($this->request->params['paging']['Post']) ){
+        $results = $this->paginate($model, $condition);
+        if( empty($this->request->params['paging'][$model]) ){
             $paging = false;
         } else {
-            $paging = $this->request->params['paging']['Post'];
+            $paging = $this->request->params['paging'][$model];
         }
+        
 		$this->set(array(
-			'posts'=> $posts,
+			'records' => $results,
 			'paging'=> $paging,
-			'_serialize' => array('posts', 'paging') 
+			'_serialize' => array('records', 'paging') 
 		));
 	}
 }

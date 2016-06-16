@@ -2,34 +2,31 @@
 	'use strict';
 
 	angular.module('app.controllers', [])
-	.controller('AppController', ['$scope', '$http', '$location', '$rootScope',function($scope, $http, $location, $rootScope){
+	.controller('AppController', ['$scope', '$location', '$rootScope', function($scope, $location, $rootScope){
 		var protocol = $location.protocol();
-		$rootScope.appURL = $location.host() === 'blog.dev' ? protocol+'://blog.dev' : protocol+'://peerblog.herokuapp.com';
+		$rootScope.appURL = $location.host() === 'blog.dev' ? protocol+'://blog.dev/' : protocol+'://peerblog.herokuapp.com/';
 		$rootScope.imagePath = $rootScope.appURL +'/img/posts_images/';
 		$rootScope.admin = 'admin.html#';
 	}])
-	.controller('PostController', ['$scope', '$location', 'paginateSvr', 'postSvr' ,function($scope, $location, paginateSvr, postSvr){
+	.controller('PostController', ['$scope', '$location', 'RestSvr', 'socketio', function($scope, $location, RestSvr, socketio){
+		
 		var load = function(){
-			postSvr.get().then(function(response){
-				$scope.posts = response.posts;
+			RestSvr.paginate('posts').then(function(response){
+				$scope.posts = response.records;
 				$scope.paging = response.paging;
 			});
 		};
 		
-		/*socketio.on('new.post.created', function(){
+		socketio.on('new.post.created', function(){
 			load();
-		});*/
+		});
 
 		/* Fetching all posts when first comes to page */
 		load();
 
 		$scope.pageChanged = function () {
-		   	paginateSvr.getData({
-		      	params: {
-		        	page: $scope.paging.page
-		      	}
-		   	}).then(function(response){
-		   		$scope.posts = response.posts;
+		   	RestSvr.paginate('posts/index/page:' + $scope.paging.page).then(function(response){
+		   		$scope.posts = response.records;
 				$scope.paging = response.paging;
 		   	});
 		};
@@ -38,92 +35,77 @@
 			$location.path('/' + $scope.posts[index].Post.id);
 		};
 	}])
-	.controller('ViewPostController', ['$scope', '$http', '$routeParams','$location', '$rootScope',function($scope, $http, $routeParams, $location, $rootScope){
+	.controller('ViewPostController', ['$scope', 'RestSvr', '$routeParams', function($scope, RestSvr, $routeParams){
 		
-		$http.get($rootScope.appURL + '/posts/' + $routeParams.id + '.json')
-        	.then(function(response) {
-            	$scope.Post = response.data.post.Post;
+		RestSvr.getById({apiUrl: 'posts', id: $routeParams.id}).then(function(response) {
+            $scope.Post = response.record.Post;
         });
 	}])
-	.controller('AdminController', ['$scope', '$http','$location', '$rootScope','localStorageService','AuthenticationService' ,function($scope, $http, $location, $rootScope, localStorageService,AuthenticationService){
-		//$rootScope.user = null;
+	.controller('AdminController', ['$scope', '$location', '$rootScope','localStorageService','AuthenticationService', 'RestSvr', function($scope, $location, $rootScope, localStorageService, AuthenticationService, RestSvr){
 		$scope.login = function (isValid) {
 			if (!isValid) return;
 			var _data = {};
 			_data.User = $scope.user;
-			$http.post($rootScope.appURL + '/users/login.json', _data)
-				.then(function(response){
-					if( response.data.message.type == 'error' ){
-						$scope.Message = response.data.message;
-					} else {
-						localStorageService.set('token', response.headers('token'));
-						localStorageService.set('user', {
-						    "id": response.data.user.id,
-						    "firstname": response.data.user.firstname,
-						    "lastname": response.data.user.lastname,
-						    "email": response.data.user.email,
-						    "role": response.data.user.role,
-						    "created": response.data.user.created,
-						});
-						AuthenticationService.isLogged = true;
-                    	$rootScope.isLogged = true;
-						$rootScope.user = localStorageService.get('user');
-						$location.path('/dashboard');
-					}
-
-				},	function (response){
-					$location.path('/');
+			RestSvr.login({apiUrl: 'users/login', data: _data}).then(function(response){
+				if( response.message.type == 'error' ){
+					$scope.Message = response.message;
+				} else {
+					localStorageService.set('token', response.token);
+					localStorageService.set('user', {
+					    "id": response.user.id,
+					    "firstname": response.user.firstname,
+					    "lastname": response.user.lastname,
+					    "email": response.user.email,
+					    "role": response.user.role,
+					    "created": response.user.created,
+					});
+					AuthenticationService.isLogged = true;
+                	$rootScope.isLogged = true;
+					$rootScope.user = localStorageService.get('user');
+					$location.path('/dashboard');
 				}
-			);
+
+			});
 		};	
 	}])
-	.controller('DashboardController', ['$scope', '$http', '$rootScope', '$location', '$timeout',function($scope, $http, $rootScope, $location,$timeout){
-		$http.get($rootScope.appURL + '/users.json').
-			then(function(response){
-				$scope.Post = response.data.posts;
+	.controller('DashboardController', ['$scope', 'RestSvr', function($scope, RestSvr){
+		RestSvr.get('users').then(function(response){
+				$scope.Post = response.records;
 			}
-		);
-	
-		$timeout(function () { 
-			$rootScope.Message = null; 
-		}, 3000); 
+		); 
 	}])
 	.controller('LogoutController', ['$scope', '$http', '$rootScope', '$location','localStorageService', function($scope, $http, $rootScope, $location,localStorageService){
-		$http.get($rootScope.appURL + '/users/logout.json').
-			then(function(response){
-				localStorageService.remove('user');
-				localStorageService.remove('token');
-				$rootScope.isLogged = false;
-				delete $rootScope.user;
-				$location.path('/');
-			});
+		$http.get($rootScope.appURL + '/users/logout.json').then(function(response){
+			localStorageService.remove('user');
+			localStorageService.remove('token');
+			$rootScope.isLogged = false;
+			delete $rootScope.user;
+			$location.path('/');
+		});
 	}])
-	.controller('ProfileController', ['$scope', '$http','$location', '$rootScope', 'localStorageService', function($scope, $http, $location, $rootScope, localStorageService){
+	.controller('ProfileController', ['$scope','$location', '$rootScope', 'localStorageService', 'RestSvr',function($scope, $location, $rootScope, localStorageService, RestSvr){
 		$scope.update_account_info = function(isValid){
 			if (!isValid) return;
 			var _data = {};
 			_data.User = $scope.user;
-			$http.put($rootScope.appURL + '/users/' + $scope.user.id + '.json', _data)
-				.then(function(response){
-					if( response.data.message.type == 'error' ){
-						$scope.Message = response.data.message;
-					} else {
+			RestSvr.put({apiUrl: 'users/', id: $scope.user.id, data: _data}).then(function(response){
+				if( response.type == 'error' ){
+					$scope.Message = response;
+				} else {
+					RestSvr.getById({apiUrl: 'users/', id: $scope.user.id}).then(function(response){
 						localStorageService.set('user', {
-						    "id": response.data.user.id,
-						    "firstname": response.data.user.firstname,
-						    "lastname": response.data.user.lastname,
-						    "email": response.data.user.email,
-						    "role": response.data.user.role,
-						    "created": response.data.user.created,
+						    "id": response.record.User.id,
+						    "firstname": response.record.User.firstname,
+						    "lastname": response.record.User.lastname,
+						    "email": response.record.User.email,
+						    "role": response.record.User.role,
+						    "created": response.record.User.created,
 						});
 						$rootScope.user = localStorageService.get('user');
 						$location.path('/dashboard');
-					}
-
-				},	function (response){
-					$location.path('/');
+					});
 				}
-			);
+			});
 		};
 
 		$scope.change_password = function(isValid){
@@ -132,9 +114,9 @@
 			_data.user = $scope.user;
 			$rootScope.Message = null;
 			if($scope.user.password === $scope.user.confirmpassword){
-				$http.post($rootScope.appURL + '/users/change_password.json', _data).then(function(response){
-					$rootScope.Message = response.data.message;
-					if( response.data.message.type == 'success' ){
+				RestSvr.post({apiUrl: '/users/change_password', data: _data}).then(function(response){
+					$rootScope.Message = response;
+					if( response.type == 'success' ){
 						$scope.user.currentpassword = null;
 						$scope.user.password = null;
 						$scope.user.confirmpassword = null;
@@ -149,22 +131,18 @@
 			}
 		};
 	}])
-	.controller('PostListController', ['$scope', '$http','$location', '$rootScope', 'localStorageService', 'paginateSvr','postSvr', function($scope, $http, $location, $rootScope, localStorageService, paginateSvr, postSvr){
+	.controller('PostListController', ['$scope', '$location', 'RestSvr', 'socketio',function($scope, $location, RestSvr, socketio){
 		var load = function(){
-			postSvr.get({apiUrl: '/users/posts_list.json'}).then(function(response){
-				$scope.posts = response.posts;
+			RestSvr.paginate('users/posts_list').then(function(response){
+				$scope.posts = response.records;
 				$scope.paging = response.paging;
 			});
 		};	
 		load();
+
 		$scope.pageChanged = function () {
-		   	paginateSvr.getData({
-		      	params: {
-		        	page: $scope.paging.page,
-		        	apiUrl: '/users/posts_list/'
-		      	}
-		   	}).then(function(response){
-		   		$scope.posts = response.posts;
+		   	RestSvr.paginate('users/posts_list/page:' + $scope.paging.page).then(function(response){
+		   		$scope.posts = response.records;
 				$scope.paging = response.paging;
 		   	});
 		};
@@ -176,10 +154,9 @@
 		
 		$scope.deletePost = function(index){
 			var e = $scope.posts[index];
-			$http.delete($rootScope.appURL + '/posts/' + e.Post.id + '.json')
-				.then(function(response){
-					load();
-					//socketio.emit('new_post');
+			RestSvr.delete({ apiUrl: 'posts/', id: e.Post.id}).then(function(response){
+				load();
+				socketio.emit('new.post.created');
 			});
 		};
 
@@ -189,14 +166,13 @@
 			var status = {1 : 0, 0: 1};
 			_data.Post = {status : status[e.Post.status]};
 			
-			$http.put($rootScope.appURL + '/posts/' + e.Post.id + '.json', _data)
-			.then(function(response){
-				//socketio.emit('new.post.created');
+			RestSvr.put({apiUrl: 'posts/', id: e.Post.id , data: _data}).then(function(response){
+				socketio.emit('new.post.created');
 				load();
 			});
 		};
 	}])
-	.controller('NewPostController', ['$scope', '$http', '$location', '$rootScope',function($scope, $http, $location, $rootScope){
+	.controller('NewPostController', ['$scope', '$location', 'socketio', 'Upload', function($scope, $location, socketio, Upload){
 		/*Image Upload*/
 		var file = {};
 		$scope.uploadFile = function(files) {
@@ -204,29 +180,22 @@
 		};
 
 		$scope.save = function () {
-			$http({
-				method: 'POST',
-				url: $rootScope.appURL + '/posts.json',
-				headers: { 'Content-Type': undefined },
-				transformRequest: function (data) {
-					var formData = new FormData();
-					formData.append("Post", angular.toJson($scope.post));
-					formData.append("file" , file[0]);
-					return formData;
-				},
-				data: { Post: $scope.post, files: $scope.files }
-			}).then(function(response){
-				//socketio.emit('new.post.created');
+			Upload.file({
+				apiUrl: 'posts', 
+				Post: $scope.post, 
+				file: file[0]
+			}).then(function (response) {
+				socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};
 
 		$scope.cancel = function () { $location.path('/posts'); };
 	}])
-	.controller('EditPostController', ['$scope', '$http', '$routeParams','$location', '$rootScope',function($scope, $http, $routeParams, $location, $rootScope){
-		$http.get($rootScope.appURL + '/posts/' + $routeParams.id + '.json')
-        	.then(function(response) {
-            	$scope.post = response.data.post.Post;
+	.controller('EditPostController', ['$scope', '$routeParams','$location', 'socketio', 'RestSvr', 'Upload',function($scope, $routeParams, $location, socketio, RestSvr, Upload){
+
+        RestSvr.getById({apiUrl: 'posts/', id: $routeParams.id}).then(function(response) {
+            $scope.post = response.record.Post;
         });
 
         /*Image Upload*/
@@ -236,23 +205,86 @@
 		};
 
         $scope.updatePost = function () {
-			$http({
-				method: 'POST',
-				url: $rootScope.appURL + '/posts.json',
-				headers: { 'Content-Type': undefined },
-				transformRequest: function (data) {
-					var formData = new FormData();
-					formData.append("Post", angular.toJson($scope.post));
-					formData.append("file" , file[0]);
-					return formData;
-				},
-				data: { Post: $scope.post, files: $scope.files }
-			}).then(function(response){
-				//socketio.emit('new.post.created');
+			Upload.file({
+				apiUrl: 'posts', 
+				Post: $scope.post, 
+				file: file[0]
+			}).then(function (response) {
+				socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};
 
 		$scope.cancel = function () { $location.path('/dashboard'); };
+	}])
+	.controller('CategoryController', ['$scope','$location', 'RestSvr', '$rootScope', function($scope, $location, RestSvr, $rootScope){
+		var load = function(){
+			RestSvr.paginate('categories').then(function(response){
+				$scope.categories = response.records;
+				$scope.paging = response.paging;
+			});	
+		};
+		load();
+
+		$scope.editCategory = function(index){
+			$location.path('/edit-category/' + $scope.categories[index].Category.id);
+		};
+
+		$scope.deleteCategory = function(index){
+			var e = $scope.categories[index];
+			RestSvr.delete({apiUrl: 'categories/', id: e.Category.id }).then(function(response){
+				$rootScope.Message = response;
+				load();
+			});
+		};
+
+		$scope.toggleStatus = function (index) {
+			var e = $scope.categories[index];
+			var _data = {};
+			var status = {1 : 0, 0: 1};
+			_data.Category = {status : status[e.Category.status]};
+			RestSvr.put({apiUrl: 'categories/' , id: e.Category.id ,data: _data}).then(function(response){
+				load();
+			});
+		};
+	}])
+	.controller('NewCategoryController', ['$scope','$location', '$rootScope', 'RestSvr',function($scope, $location, $rootScope, RestSvr){
+		$scope.heading = 'Create a New Category';
+		$scope.buttonName = 'Create';
+		$scope.save = function(isValid){
+			if (!isValid) return;
+			var _data = {};
+			_data.Category = $scope.category;
+			$rootScope.Message = null;
+			RestSvr.post({apiUrl: 'categories', data: _data}).then(function(response){
+				$rootScope.Message = response;
+				if(response.type == 'success'){
+					$location.path('/category');
+				}
+			});
+		};
+
+		$scope.cancel = function () { $location.path('/category'); };
+	}])
+	.controller('EditCategoryController', ['$scope','$location', '$rootScope', 'RestSvr', '$routeParams', function($scope, $location, $rootScope, RestSvr, $routeParams){
+		$scope.heading = 'Update Category';
+		$scope.buttonName = 'Update';
+		RestSvr.getById({apiUrl: 'categories', id: $routeParams.id}).then(function(response) {
+            $scope.category = response.record.Category;
+        });
+		$scope.save = function(isValid){
+			if (!isValid) return;
+			var _data = {};
+			_data.Category = $scope.category;
+			$rootScope.Message = null;
+			RestSvr.put({apiUrl: 'categories/', data: _data, id: $scope.category.id}).then(function(response){
+				$rootScope.Message = response;
+				if(response.type == 'success'){
+					$location.path('/category');
+				}
+			});
+		};
+
+		$scope.cancel = function () { $location.path('/category'); };
 	}]);
 }());

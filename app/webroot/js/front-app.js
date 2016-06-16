@@ -1,100 +1,15 @@
 !function() {
     "use strict";
-    angular.module("app", [ "ngRoute", "app.controllers", "app.directives", "app.services", "angular-loading-bar", "ui.bootstrap", "LocalStorageModule", "textAngular" ]).config([ "$routeProvider", "cfpLoadingBarProvider", "$httpProvider", function(a, b, c) {
+    angular.module("app", [ "ngRoute", "app.controllers", "app.directives", "app.services", "ui.bootstrap", "angular-loading-bar", "truncate", "ngSanitize" ]).config([ "$routeProvider", "cfpLoadingBarProvider", function(a, b) {
         b.includeSpinner = !1, a.when("/", {
-            templateUrl: "views/admin/login.html",
-            controller: "AdminController",
-            access: {
-                requiredLogin: !1
-            }
-        }).when("/dashboard", {
-            templateUrl: "views/admin/dashboard.html",
-            controller: "DashboardController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/logout", {
-            template: "",
-            controller: "LogoutController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/profile", {
-            templateUrl: "views/admin/profile.html",
-            controller: "ProfileController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/posts", {
-            templateUrl: "views/admin/post.html",
-            controller: "PostListController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/create", {
-            templateUrl: "views/admin/create.html",
-            controller: "NewPostController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/edit/:id", {
-            templateUrl: "views/admin/edit.html",
-            controller: "EditPostController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/category", {
-            templateUrl: "views/admin/categories.html",
-            controller: "CategoryController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/create-category", {
-            templateUrl: "views/admin/create_categories.html",
-            controller: "NewCategoryController",
-            access: {
-                requiredLogin: !0
-            }
-        }).when("/edit-category/:id", {
-            templateUrl: "views/admin/create_categories.html",
-            controller: "EditCategoryController",
-            access: {
-                requiredLogin: !0
-            }
+            templateUrl: "views/post.html",
+            controller: "PostController"
+        }).when("/:id", {
+            templateUrl: "views/single.html",
+            controller: "ViewPostController"
         }).otherwise({
             redirectTo: "/"
-        }), c.defaults.useXDomain = !0, delete c.defaults.headers.common["X-Requested-With"];
-        var d = [ "$q", "$window", "$rootScope", "localStorageService", "AuthenticationService", "mapUrlExt", "$timeout", function(a, b, c, d, e, f, g) {
-            return {
-                request: function(a) {
-                    a.headers = a.headers || {};
-                    var b = d.get("token");
-                    return b && (a.headers.token = b, e.isLogged = 1, c.isLogged = 1), a;
-                },
-                requestError: function(b) {
-                    return a.reject(b);
-                },
-                response: function(b) {
-                    return g(function() {
-                        c.Message = {
-                            type: "fade"
-                        };
-                    }, 5e3), b || a.when(b);
-                },
-                responseError: function(f) {
-                    return null !== f && 400 === f.status && (console.log(f), d.remove("token"), d.remove("user"), 
-                    e.isLogged = !1, c.isLogged = !1, b.location.href = "admin.html"), a.reject(f);
-                }
-            };
-        } ];
-        c.interceptors.push(d);
-    } ]).run([ "$rootScope", "$location", "localStorageService", "AuthenticationService", function(a, b, c, d) {
-        a.$on("$routeChangeStart", function(a, e, f) {
-            if (null === e || null === e.access || !e.access.requiredLogin || d.isLogged || c.get("user")) {
-                var g = c.get("token");
-                "/" == b.path() && g && b.path("/dashboard");
-            } else d.isLogged = 0, b.path("/");
-        }), a.user = c.get("user");
+        });
     } ]);
 }(), function() {
     "use strict";
