@@ -12,4 +12,4 @@ io.on('connection', function (socket) {
 	});
 });*/
 
-server.listen('/tmp/nginx.socket');
+server.listen(process.env.PORT);
