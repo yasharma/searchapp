@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class CategoriesController extends AppController {
 
 	public function index() {
-		$this->getList('Category', 20, array('id', 'name', 'status','created','post_count'), [],false);
+		$this->getList('Category', 10, array('id', 'name', 'status','created','post_count'), [],false);
 	}
 
 	public function view($id = null) {
@@ -13,6 +13,24 @@ class CategoriesController extends AppController {
             'record' => $category,
             '_serialize' => array('record')
         ));
+	}
+
+	public function getByName()
+	{
+		if( !empty($this->request->query) ){
+			$results = $this->Category->find('list',
+				array(
+					'conditions' => array(
+						'name LIKE' => '%'. $this->request->query['name'] . '%'
+					),
+					'fields' => array('id', 'name')
+				)
+			);
+			$this->set(array(
+				'records' => $results,
+				'_serialize' => array('records') 
+			));
+		}
 	}
 
 	public function add() {

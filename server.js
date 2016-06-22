@@ -1,4 +1,5 @@
 var fs = require('fs');
+fs.openSync('/tmp/app-initialized', 'w');
 var http = require('http');
 
 //Create a server

@@ -119,7 +119,7 @@
         };
     } ]).controller("ViewPostController", [ "$scope", "RestSvr", "$routeParams", function(a, b, c) {
         b.getById({
-            apiUrl: "posts",
+            apiUrl: "posts/",
             id: c.id
         }).then(function(b) {
             a.Post = b.record.Post;
@@ -225,15 +225,26 @@
                 d.emit("new.post.created"), e();
             });
         };
-    } ]).controller("NewPostController", [ "$scope", "$location", "socketio", "Upload", function(a, b, c, d) {
-        var e = {};
+    } ]).controller("NewPostController", [ "$scope", "$location", "socketio", "Upload", "$http", function(a, b, c, d, e) {
+        a.getLocation = function(a) {
+            return e.get("categories/getByName.json", {
+                params: {
+                    name: a
+                }
+            }).then(function(a) {
+                return a.data.records.map(function(a) {
+                    console.log(a);
+                });
+            });
+        };
+        var f = {};
         a.uploadFile = function(a) {
-            e = a;
+            f = a;
         }, a.save = function() {
             d.file({
                 apiUrl: "posts",
                 Post: a.post,
-                file: e[0]
+                file: f[0]
             }).then(function(a) {
                 c.emit("new.post.created"), b.path("/posts");
             });
@@ -267,7 +278,11 @@
                 a.categories = b.records, a.paging = b.paging;
             });
         };
-        e(), a.editCategory = function(c) {
+        e(), a.pageChanged = function() {
+            c.paginate("categories/index/page:" + a.paging.page).then(function(b) {
+                a.categories = b.records, a.paging = b.paging;
+            });
+        }, a.editCategory = function(c) {
             b.path("/edit-category/" + a.categories[c].Category.id);
         }, a.deleteCategory = function(b) {
             var f = a.categories[b];
@@ -308,7 +323,7 @@
         };
     } ]).controller("EditCategoryController", [ "$scope", "$location", "$rootScope", "RestSvr", "$routeParams", function(a, b, c, d, e) {
         a.heading = "Update Category", a.buttonName = "Update", d.getById({
-            apiUrl: "categories",
+            apiUrl: "categories/",
             id: e.id
         }).then(function(b) {
             a.category = b.record.Category;

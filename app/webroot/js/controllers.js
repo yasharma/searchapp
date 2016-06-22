@@ -37,7 +37,7 @@
 	}])
 	.controller('ViewPostController', ['$scope', 'RestSvr', '$routeParams', function($scope, RestSvr, $routeParams){
 		
-		RestSvr.getById({apiUrl: 'posts', id: $routeParams.id}).then(function(response) {
+		RestSvr.getById({apiUrl: 'posts/', id: $routeParams.id}).then(function(response) {
             $scope.Post = response.record.Post;
         });
 	}])
@@ -172,7 +172,19 @@
 			});
 		};
 	}])
-	.controller('NewPostController', ['$scope', '$location', 'socketio', 'Upload', function($scope, $location, socketio, Upload){
+	.controller('NewPostController', ['$scope', '$location', 'socketio', 'Upload', '$http', function($scope, $location, socketio, Upload, $http){
+
+		$scope.getLocation = function(value){
+			return $http.get('categories/getByName.json', {
+				params: { name: value }
+			}).then(function(response){
+				return response.data.records.map(function(item){
+        			console.log(item);
+      			});
+				//return response.data.records;
+			});
+		};
+
 		/*Image Upload*/
 		var file = {};
 		$scope.uploadFile = function(files) {
@@ -226,6 +238,13 @@
 		};
 		load();
 
+		$scope.pageChanged = function () {
+		   	RestSvr.paginate('categories/index/page:' + $scope.paging.page).then(function(response){
+		   		$scope.categories = response.records;
+				$scope.paging = response.paging;
+		   	});
+		};
+
 		$scope.editCategory = function(index){
 			$location.path('/edit-category/' + $scope.categories[index].Category.id);
 		};
@@ -269,7 +288,7 @@
 	.controller('EditCategoryController', ['$scope','$location', '$rootScope', 'RestSvr', '$routeParams', function($scope, $location, $rootScope, RestSvr, $routeParams){
 		$scope.heading = 'Update Category';
 		$scope.buttonName = 'Update';
-		RestSvr.getById({apiUrl: 'categories', id: $routeParams.id}).then(function(response) {
+		RestSvr.getById({apiUrl: 'categories/', id: $routeParams.id}).then(function(response) {
             $scope.category = response.record.Category;
         });
 		$scope.save = function(isValid){

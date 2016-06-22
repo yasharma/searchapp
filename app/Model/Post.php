@@ -6,6 +6,8 @@ App::uses('AppModel', 'Model');
  */
 class Post extends AppModel {
 
+	protected $_image;
+
 	public $belongsTo = array(
         'Category' => array(
         	'className' => 'Category',
@@ -31,11 +33,31 @@ class Post extends AppModel {
         }
 	    if(!empty($_FILES['file']['name'])){
 	    	$this->data['Post']['image'] = $this->_uploadFile($_FILES['file']);
+	    	$this->data['Post']['image_url'] = null;
 	    }
 	    if(!empty($this->data['Post']['image_url'])){
+	    	$this->beforeDelete();
+	    	$this->afterDelete();
 	    	$this->data['Post']['image'] = null;
 		}
 	    return true;
+	}
+
+	public function beforeDelete($cascade = true)
+	{
+		$this->_image = $this->field('image');
+		return true;
+	}
+
+	public function afterDelete()
+	{
+		if( !empty($this->_image) ){
+			$path = IMAGES . 'posts_images' . DS . $this->_image;
+			if( file_exists($path) ){
+				return unlink($path);
+			}
+		}
+		return false;
 	}
 
 	protected function _uploadFile($_file){
@@ -47,4 +69,6 @@ class Post extends AppModel {
 		}
 		return false;
 	}
+
+
 }
