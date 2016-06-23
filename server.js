@@ -1,15 +1,14 @@
 var fs = require('fs');
-fs.openSync('/tmp/app-initialized', 'w');
-var http = require('http');
+// write nginx tmp
+fs.writeFile("/tmp/app-initialized", "Ready to launch nginx", function(err) {
+    if(err) {
+        console.log(err);
+    } else {
+        console.log("The file was saved!");
+    }
+});
 
-//Create a server
-var server = http.createServer();
-
-/*var io = require('socket.io')(process.env.PORT);
-io.on('connection', function (socket) {
-	socket.on('new.post.created', function () {
-		io.emit('new.post.created');
-	});
-});*/
-
-server.listen(process.env.PORT);
+// listen on the nginx socket
+app.listen('/tmp/nginx.socket', function() {
+    console.log("Listening ");
+});

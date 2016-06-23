@@ -174,15 +174,18 @@
 	}])
 	.controller('NewPostController', ['$scope', '$location', 'socketio', 'Upload', '$http', function($scope, $location, socketio, Upload, $http){
 
-		$scope.getLocation = function(value){
+		$scope.getCategories = function(value){
 			return $http.get('categories/getByName.json', {
 				params: { name: value }
 			}).then(function(response){
-				return response.data.records.map(function(item){
-        			console.log(item);
-      			});
-				//return response.data.records;
+				return response.data.records.map(function(item, index, arr){
+					return item.Category.name;
+				});
 			});
+		};
+
+		$scope.categorySelected = function(item, model, label, event){
+			console.log(item);
 		};
 
 		/*Image Upload*/

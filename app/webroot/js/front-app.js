@@ -141,16 +141,18 @@
             });
         };
     } ]).controller("NewPostController", [ "$scope", "$location", "socketio", "Upload", "$http", function(a, b, c, d, e) {
-        a.getLocation = function(a) {
+        a.getCategories = function(a) {
             return e.get("categories/getByName.json", {
                 params: {
                     name: a
                 }
             }).then(function(a) {
-                return a.data.records.map(function(a) {
-                    console.log(a);
+                return a.data.records.map(function(a, b, c) {
+                    return a.Category.name;
                 });
             });
+        }, a.categorySelected = function(a, b, c, d) {
+            console.log(a);
         };
         var f = {};
         a.uploadFile = function(a) {

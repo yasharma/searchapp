@@ -18,7 +18,7 @@ class CategoriesController extends AppController {
 	public function getByName()
 	{
 		if( !empty($this->request->query) ){
-			$results = $this->Category->find('list',
+			$results = $this->Category->find('all',
 				array(
 					'conditions' => array(
 						'name LIKE' => '%'. $this->request->query['name'] . '%'
