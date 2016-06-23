@@ -96,4 +96,13 @@ class CategoriesController extends AppController {
 		    '_serialize' => array('message')
 		));
 	}
+
+	public function count()
+    {
+        $categories = $this->Category->find('count');
+        $this->set(array(
+            'records' => $categories,
+            '_serialize' => array('records')
+        ));
+    }
 }

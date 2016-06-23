@@ -76,4 +76,13 @@ class PostsController extends AppController {
             '_serialize' => array('message')
         ));
     }
+
+    public function count()
+    {
+        $posts = $this->Post->find('count');
+        $this->set(array(
+            'records' => $posts,
+            '_serialize' => array('records')
+        ));
+    }
 }

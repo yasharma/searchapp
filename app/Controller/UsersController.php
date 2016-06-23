@@ -3,9 +3,6 @@ App::uses('AppController', 'Controller');
 
 class UsersController extends AppController {
 
-	//public $autoRender = false;
-	public $uses = array('User','Post');
-
 	public function beforeFilter() {
         parent::beforeFilter();
         $this->Auth->allow('login','checklogin');
@@ -41,11 +38,7 @@ class UsersController extends AppController {
     }
 
 	public function index() {
-        $posts = $this->Post->find('count');
-		$this->set(array(
-            'records' => $posts,
-            '_serialize' => array('records')
-        ));
+        
 	}
 
 	public function login()
@@ -156,6 +149,7 @@ class UsersController extends AppController {
 
 	public function posts_list()
 	{
+		$this->loadModel('Post');
 		$this->getList('Post', 20, array('id', 'title', 'status','created'), [],false);	
 	}	
 }

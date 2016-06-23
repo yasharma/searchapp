@@ -144,8 +144,10 @@
             }
         };
     } ]).controller("DashboardController", [ "$scope", "RestSvr", function(a, b) {
-        b.get("users").then(function(b) {
-            a.Post = b.records;
+        b.get("posts/count").then(function(b) {
+            a.totalPosts = b.records;
+        }), b.get("categories/count").then(function(b) {
+            a.totalCategories = b.records;
         });
     } ]).controller("LogoutController", [ "$scope", "$http", "$rootScope", "$location", "localStorageService", function(a, b, c, d, e) {
         b.get(c.appURL + "/users/logout.json").then(function(a) {
