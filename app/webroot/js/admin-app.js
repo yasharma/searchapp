@@ -90,7 +90,7 @@
         c.interceptors.push(d);
     } ]).run([ "$rootScope", "$location", "localStorageService", "AuthenticationService", function(a, b, c, d) {
         a.$on("$routeChangeStart", function(a, e, f) {
-            if (null === e || null === e.access || !e.access.requiredLogin || d.isLogged || c.get("user")) {
+            if (console.log(e.access.requiredLogin), null === e || null === e.access || !e.access.requiredLogin || d.isLogged || c.get("user")) {
                 var g = c.get("token");
                 "/" == b.path() && g && b.path("/dashboard");
             } else d.isLogged = 0, b.path("/");
@@ -233,11 +233,9 @@
                 }
             }).then(function(a) {
                 return a.data.records.map(function(a, b, c) {
-                    return a.Category.name;
+                    return a.Category;
                 });
             });
-        }, a.categorySelected = function(a, b, c, d) {
-            console.log(a);
         };
         var f = {};
         a.uploadFile = function(a) {

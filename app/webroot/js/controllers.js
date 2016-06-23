@@ -179,13 +179,9 @@
 				params: { name: value }
 			}).then(function(response){
 				return response.data.records.map(function(item, index, arr){
-					return item.Category.name;
+					return item.Category;
 				});
 			});
-		};
-
-		$scope.categorySelected = function(item, model, label, event){
-			console.log(item);
 		};
 
 		/*Image Upload*/

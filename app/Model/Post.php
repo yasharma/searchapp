@@ -35,6 +35,10 @@ class Post extends AppModel {
 	    	$this->data['Post']['image'] = $this->_uploadFile($_FILES['file']);
 	    	$this->data['Post']['image_url'] = null;
 	    }
+	    if(!empty($this->data['Post']['category']['id'])){
+	    	$this->data['Post']['categories_id'] = $this->data['Post']['category']['id'];
+	    }
+
 	    if(!empty($this->data['Post']['image_url'])){
 	    	$this->beforeDelete();
 	    	$this->afterDelete();

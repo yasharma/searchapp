@@ -148,11 +148,9 @@
                 }
             }).then(function(a) {
                 return a.data.records.map(function(a, b, c) {
-                    return a.Category.name;
+                    return a.Category;
                 });
             });
-        }, a.categorySelected = function(a, b, c, d) {
-            console.log(a);
         };
         var f = {};
         a.uploadFile = function(a) {

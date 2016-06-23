@@ -112,6 +112,7 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 	}])
 	.run(['$rootScope', '$location', 'localStorageService', 'AuthenticationService',function ($rootScope, $location, localStorageService, AuthenticationService) {
 		$rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
+			console.log(nextRoute.access.requiredLogin);
 			if ( nextRoute !== null && nextRoute.access !== null && nextRoute.access.requiredLogin && !AuthenticationService.isLogged && !localStorageService.get('user')) {
 			    AuthenticationService.isLogged = 0;
 			    $location.path("/");
