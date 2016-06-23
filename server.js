@@ -11,5 +11,5 @@ io.on('connection', function (socket) {
 		io.emit('new.post.created');
 	});
 });*/
-
+console.log(process.env.PORT);
 server.listen(process.env.PORT);
