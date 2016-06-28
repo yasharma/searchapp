@@ -150,6 +150,6 @@ class UsersController extends AppController {
 	public function posts_list()
 	{
 		$this->loadModel('Post');
-		$this->getList('Post', 20, array('id', 'title', 'status','created'), [],false);	
+		$this->getList('Post', 20, array('id', 'title', 'status','created'), [],false,false);	
 	}	
 }

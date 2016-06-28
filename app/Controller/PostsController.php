@@ -9,7 +9,12 @@ class PostsController extends AppController {
     }
 
 	public function index() {
-        $this->getList('Post', 10, array('id', 'title', 'status','image','image_url','created'), array('Post.status' => 1));
+        $this->Post->Behaviors->load('Containable');
+        $this->getList('Post', 10, 
+            array('id', 'title', 'status','image','image_url','created','Category.name'), 
+            array('Post.status' => 1), 
+            array('Category')
+        );
 	}
     
 	public function view($id) {

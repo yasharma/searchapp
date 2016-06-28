@@ -3,6 +3,11 @@ App::uses('AppController', 'Controller');
 
 class CategoriesController extends AppController {
 
+	public function beforeFilter() {
+        $this->SecurityToken->unlockedActions = array('getByList');
+        $this->Auth->allow('getByList');
+    }
+
 	public function index() {
 		$this->getList('Category', 10, array('id', 'name', 'status','created','post_count'), [],false);
 	}
@@ -105,4 +110,20 @@ class CategoriesController extends AppController {
             '_serialize' => array('records')
         ));
     }
+
+    public function getByList()
+	{
+		$categories = $this->Category->find('list',
+			array(
+				'conditions' => array(
+					'Category.status' => 1
+				),
+				'fields' => array('id', 'name')
+ 			)
+		);
+        $this->set(array(
+            'records' => $categories,
+            '_serialize' => array('records')
+        ));
+	}
 }

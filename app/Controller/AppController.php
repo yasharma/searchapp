@@ -40,12 +40,13 @@ class AppController extends Controller {
 	 * that will returns data and paging
 	 */
 
-	public function getList($model, $limit, $fields, $condition = array(), $callbacks = true)
+	public function getList($model, $limit, $fields, $condition = array(), $contain = false, $callbacks = true)
 	{
 		$this->paginate = array(
             'limit' => $limit,
             'fields' => $fields,
-            'order' => 'id desc',
+            'order' => "$model.id desc",
+            'contain' => $contain,
             'callbacks' => $callbacks
         );
         $results = $this->paginate($model, $condition);

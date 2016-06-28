@@ -70,13 +70,11 @@
 	}])
 	.controller('DashboardController', ['$scope', 'RestSvr', function($scope, RestSvr){
 		RestSvr.get('posts/count').then(function(response){
-				$scope.totalPosts = response.records;
-			}
-		);
-		RestSvr.get('categories/count').then(function(response){
-				$scope.totalCategories = response.records;
-			}
-		);	
+			$scope.totalPosts = response.records;
+			return RestSvr.get('categories/count');
+		}).then(function(response){
+			$scope.totalCategories = response.records;
+		});
 	}])
 	.controller('LogoutController', ['$scope', '$http', '$rootScope', '$location','localStorageService', function($scope, $http, $rootScope, $location,localStorageService){
 		$http.get($rootScope.appURL + '/users/logout.json').then(function(response){

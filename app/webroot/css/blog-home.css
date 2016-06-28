@@ -1,16 +1,5 @@
-/*!
- * Start Bootstrap - Blog Home HTML Template (http://startbootstrap.com)
- * Code licensed under the Apache License v2.0.
- * For details, see http://www.apache.org/licenses/LICENSE-2.0.
- */
-
-body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-}
-
-footer {
-    margin: 50px 0;
-}
+body { padding-top: 70px; }
+footer { margin: 50px 0; }
 
 /* Editor styling */
 
@@ -29,15 +18,6 @@ footer {
 	padding: 10px;
 	background-color: #FFF;
 	border: 1px solid #EEE;
-}
-
-/*.ta-scroll-window.form-control {
-  height: auto;
-  max-height: 300px;
-}*/
-
-textarea.ta-bind {
-	width: 100%;
 }
 
 /* Homepage thumbnail */
@@ -61,15 +41,9 @@ textarea.ta-bind {
 	position: absolute;
 	bottom: 0;
 }
-.thumbnail .caption h4{
-    font: bold 16px/1.5em "Roboto", Arial, sans-serif;
-}
-.well{
-	border-radius: 0;
-}
-.thumbnail a>img, .thumbnail>img{
-	border-radius: 4px 4px 0 0;
-}
+.thumbnail .caption h4{ font: bold 16px/1.5em "Roboto", Arial, sans-serif; }
+.well{ border-radius: 0; }
+.thumbnail a>img, .thumbnail>img{ border-radius: 4px 4px 0 0; }
 .thumb-img{
 	float: left;
 	height: 250px;
@@ -81,6 +55,13 @@ textarea.ta-bind {
 	margin: 0 auto;
 	width: auto;
 }
-.center{
-	text-align: center;
+.center{ text-align: center; }
+.category {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.mb5{ margin: 0 0 5px; }
+.category-list{ 
+	font-size: 90%;
+	cursor: pointer;
 }

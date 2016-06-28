@@ -59,9 +59,9 @@
             }
         };
     } ]).controller("DashboardController", [ "$scope", "RestSvr", function(a, b) {
-        b.get("posts/count").then(function(b) {
-            a.totalPosts = b.records;
-        }), b.get("categories/count").then(function(b) {
+        b.get("posts/count").then(function(c) {
+            return a.totalPosts = c.records, b.get("categories/count");
+        }).then(function(b) {
             a.totalCategories = b.records;
         });
     } ]).controller("LogoutController", [ "$scope", "$http", "$rootScope", "$location", "localStorageService", function(a, b, c, d, e) {
@@ -277,10 +277,12 @@
         return {
             restrict: "A",
             templateUrl: "elements/sidebar.html",
-            controller: [ "$scope", "$http", "$rootScope", function(a, b, c) {
+            controller: [ "$scope", "RestSvr", function(a, b) {
                 a.search = function(b) {
                     b && console.log(a.post.search);
-                };
+                }, b.get("categories/getByList").then(function(b) {
+                    a.categorieslist = b.records;
+                });
             } ]
         };
     }).directive("adminHeader", function() {

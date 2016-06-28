@@ -5,7 +5,6 @@ App::uses('AppModel', 'Model');
  *
  */
 class Post extends AppModel {
-
 	protected $_image;
 
 	public $belongsTo = array(
