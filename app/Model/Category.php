@@ -12,7 +12,7 @@ class Category extends AppModel {
 
 	public function saveManyCategories($data)
 	{
-		$names = explode(',', $data['Category']['name']);
+		$names = array_filter(explode(',', $data['Category']['name']));
 		foreach ($names as $key => $value) {
 			$data[$key]['Category']['name'] = trim($value);
 		}
