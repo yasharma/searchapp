@@ -19,7 +19,7 @@ class Post extends AppModel {
 	    foreach ($results as $key => $val) {
 	        if (isset($val['Post']['created'])) {
 	            $results[$key]['Post']['created'] = CakeTime::timeAgoInWords($val['Post']['created'], 
-	            	array('format' => 'F jS, Y', 'end' => '+3 week')
+	            	array('format' => 'F jS, Y', 'end' => '+1 week')
 	            );
 	        }
 	    }
@@ -73,5 +73,18 @@ class Post extends AppModel {
 		return false;
 	}
 
+	/* similar to findById */
+	public function get($id, $options)
+	{
+		return $this->find('first',
+			array(
+				'conditions' => array(
+					'Post.id' => $id
+				),
+				'contain' => isset($options['contain'])? $options['contain'] : false,
+				'fields' => isset($options['fields'])? $options['fields'] : [],
+			)
+		);
+	}
 
 }

@@ -4,9 +4,15 @@
         b.includeSpinner = !1, a.when("/", {
             templateUrl: "views/post.html",
             controller: "PostController"
+        }).when("/search?:q", {
+            templateUrl: "views/post.html",
+            controller: "PostController"
         }).when("/:id", {
             templateUrl: "views/single.html",
             controller: "ViewPostController"
+        }).when("/category/:category", {
+            templateUrl: "views/post.html",
+            controller: "PostByCategoriesCtrl"
         }).otherwise({
             redirectTo: "/"
         });
@@ -18,14 +24,18 @@
         c.appURL = "blog.dev" === b.host() ? d + "://blog.dev/" : d + "://peerblog.herokuapp.com/", 
         c.imagePath = c.appURL + "/img/posts_images/", c.admin = "admin.html#";
     } ]).controller("PostController", [ "$scope", "$location", "RestSvr", "socketio", function(a, b, c, d) {
-        var e = function() {
-            c.paginate("posts").then(function(b) {
+        var e = angular.isUndefined(b.search().q) ? void 0 : {
+            params: {
+                q: b.search().q
+            }
+        }, f = function() {
+            c.paginate("posts", void 0, e).then(function(b) {
                 a.posts = b.records, a.paging = b.paging;
             });
         };
         d.on("new.post.created", function() {
-            e();
-        }), e(), a.pageChanged = function() {
+            f();
+        }), f(), a.pageChanged = function() {
             c.paginate("posts/index/page:" + a.paging.page).then(function(b) {
                 a.posts = b.records, a.paging = b.paging;
             });
@@ -142,14 +152,14 @@
                 d.emit("new.post.created"), e();
             });
         };
-    } ]).controller("NewPostController", [ "$scope", "$location", "socketio", "Upload", "$http", function(a, b, c, d, e) {
+    } ]).controller("NewPostController", [ "$scope", "$location", "socketio", "Upload", "RestSvr", function(a, b, c, d, e) {
         a.getCategories = function(a) {
-            return e.get("categories/getByName.json", {
+            return e.get("categories/getByName", {
                 params: {
                     name: a
                 }
             }).then(function(a) {
-                return a.data.records.map(function(a, b, c) {
+                return a.records.map(function(a, b, c) {
                     return a.Category;
                 });
             });
@@ -169,11 +179,21 @@
             b.path("/posts");
         };
     } ]).controller("EditPostController", [ "$scope", "$routeParams", "$location", "socketio", "RestSvr", "Upload", function(a, b, c, d, e, f) {
-        e.getById({
+        a.getCategories = function(a) {
+            return e.get("categories/getByName.json", {
+                params: {
+                    name: a
+                }
+            }).then(function(a) {
+                return a.records.map(function(a, b, c) {
+                    return a.Category;
+                });
+            });
+        }, e.getById({
             apiUrl: "posts/",
             id: b.id
         }).then(function(b) {
-            a.post = b.record.Post;
+            a.post = b.record.Post, a.post.category = b.record.Category;
         });
         var g = {};
         a.uploadFile = function(a) {
@@ -258,6 +278,19 @@
         }, a.cancel = function() {
             b.path("/category");
         };
+    } ]).controller("PostByCategoriesCtrl", [ "$scope", "$location", "$rootScope", "RestSvr", "$routeParams", function(a, b, c, d, e) {
+        var f = function() {
+            d.paginate("categories/name/", e.category).then(function(b) {
+                a.posts = b.records.Post, a.category = b.records.Category, a.paging = b.paging;
+            });
+        };
+        f(), a.pageChanged = function() {
+            d.paginate("categories/name/" + e.category + "/page:" + a.paging.page).then(function(b) {
+                a.posts = b.records.Post, a.category = b.records.Category, a.paging = b.paging;
+            });
+        }, a.viewPost = function(c) {
+            b.path("/" + a.posts[c].Post.id);
+        };
     } ]);
 }(), function() {
     "use strict";
@@ -277,12 +310,14 @@
         return {
             restrict: "A",
             templateUrl: "elements/sidebar.html",
-            controller: [ "$scope", "RestSvr", function(a, b) {
+            controller: [ "$scope", "RestSvr", "$location", function(a, b, c) {
                 a.search = function(b) {
-                    b && console.log(a.post.search);
+                    b && c.path("/search").search("q", a.post.search);
                 }, b.get("categories/getByList").then(function(b) {
-                    a.categorieslist = b.records;
-                });
+                    a.categories = b.records;
+                }), a.viewByCategory = function(b) {
+                    c.path("/category/" + angular.lowercase(a.categories[b].Category.name));
+                };
             } ]
         };
     }).directive("adminHeader", function() {
@@ -370,16 +405,18 @@
                     };
                 });
             },
-            paginate: function(c) {
-                return a.get(b.json(c)).then(function(a) {
+            paginate: function(c, d, e) {
+                var f = angular.isUndefined(d) ? "" : d, g = angular.isUndefined(e) ? "" : e;
+                return a.get(b.json(c + f), g).then(function(a) {
                     return {
                         records: a.data.records,
                         paging: a.data.paging
                     };
                 });
             },
-            get: function(c) {
-                return a.get(b.json(c)).then(function(a) {
+            get: function(c, d) {
+                angular.isUndefined(d) ? null : d;
+                return a.get(b.json(c), d).then(function(a) {
                     return {
                         records: a.data.records
                     };

@@ -49,17 +49,17 @@ class AppController extends Controller {
             'contain' => $contain,
             'callbacks' => $callbacks
         );
+
         $results = $this->paginate($model, $condition);
         if( empty($this->request->params['paging'][$model]) ){
             $paging = false;
         } else {
             $paging = $this->request->params['paging'][$model];
         }
-        
-		$this->set(array(
-			'records' => $results,
-			'paging'=> $paging,
-			'_serialize' => array('records', 'paging') 
-		));
+       
+		return array(
+			'results' => $results,
+			'paging' => $paging
+		);
 	}
 }

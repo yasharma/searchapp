@@ -26,16 +26,20 @@ angular.module('app.directives', [])
             restrict: 'A',            
             //scope: {user: '='},
             templateUrl: "elements/sidebar.html",
-            controller: ['$scope', 'RestSvr', function ($scope, RestSvr) {
+            controller: ['$scope', 'RestSvr', '$location', function ($scope, RestSvr, $location) {
                 // Your behaviour goes here :)
                 $scope.search = function(isValid){
                     if(!isValid) return;
-                    console.log($scope.post.search);
+                    $location.path('/search').search('q', $scope.post.search);
                 };
 
                 RestSvr.get('categories/getByList').then(function(response){
-                    $scope.categorieslist = response.records;
+                    $scope.categories = response.records;
                 });
+
+                $scope.viewByCategory = function(index){
+                    $location.path('/category/' + angular.lowercase($scope.categories[index].Category.name));
+                };
             }]
         };
     })

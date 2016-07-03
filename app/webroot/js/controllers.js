@@ -9,9 +9,10 @@
 		$rootScope.admin = 'admin.html#';
 	}])
 	.controller('PostController', ['$scope', '$location', 'RestSvr', 'socketio', function($scope, $location, RestSvr, socketio){
+		var search = !angular.isUndefined($location.search().q) ? {params: { q: $location.search().q }}: undefined;
 		
 		var load = function(){
-			RestSvr.paginate('posts').then(function(response){
+			RestSvr.paginate('posts', undefined,search).then(function(response){
 				$scope.posts = response.records;
 				$scope.paging = response.paging;
 			});
@@ -174,13 +175,11 @@
 			});
 		};
 	}])
-	.controller('NewPostController', ['$scope', '$location', 'socketio', 'Upload', '$http', function($scope, $location, socketio, Upload, $http){
+	.controller('NewPostController', ['$scope', '$location', 'socketio', 'Upload', 'RestSvr',function($scope, $location, socketio, Upload, RestSvr){
 
 		$scope.getCategories = function(value){
-			return $http.get('categories/getByName.json', {
-				params: { name: value }
-			}).then(function(response){
-				return response.data.records.map(function(item, index, arr){
+			return RestSvr.get('categories/getByName', {params: { name: value }}).then(function(response){
+				return response.records.map(function(item, index, arr){
 					return item.Category;
 				});
 			});
@@ -205,10 +204,19 @@
 
 		$scope.cancel = function () { $location.path('/posts'); };
 	}])
-	.controller('EditPostController', ['$scope', '$routeParams','$location', 'socketio', 'RestSvr', 'Upload',function($scope, $routeParams, $location, socketio, RestSvr, Upload){
+	.controller('EditPostController', ['$scope', '$routeParams','$location', 'socketio', 'RestSvr', 'Upload', function($scope, $routeParams, $location, socketio, RestSvr, Upload){
+
+		$scope.getCategories = function(value){
+			return RestSvr.get('categories/getByName.json', {params: { name: value }}).then(function(response){
+				return response.records.map(function(item, index, arr){
+					return item.Category;
+				});
+			});
+		};
 
         RestSvr.getById({apiUrl: 'posts/', id: $routeParams.id}).then(function(response) {
             $scope.post = response.record.Post;
+            $scope.post.category = response.record.Category;
         });
 
         /*Image Upload*/
@@ -306,5 +314,29 @@
 		};
 
 		$scope.cancel = function () { $location.path('/category'); };
+	}])
+	.controller('PostByCategoriesCtrl', ['$scope','$location', '$rootScope', 'RestSvr', '$routeParams', function($scope, $location, $rootScope, RestSvr, $routeParams){
+		var load = function(){
+			RestSvr.paginate('categories/name/', $routeParams.category).then(function(response){
+				$scope.posts = response.records.Post;
+				$scope.category = response.records.Category;
+				$scope.paging = response.paging;
+			});
+		};
+
+		/* Fetching all posts when first comes to page */
+		load();
+
+		$scope.pageChanged = function () {
+		   	RestSvr.paginate('categories/name/' + $routeParams.category + '/page:' + $scope.paging.page).then(function(response){
+		   		$scope.posts = response.records.Post;
+		   		$scope.category = response.records.Category;
+				$scope.paging = response.paging;
+		   	});
+		};
+
+		$scope.viewPost = function(index){
+			$location.path('/' + $scope.posts[index].Post.id);
+		};
 	}]);
 }());

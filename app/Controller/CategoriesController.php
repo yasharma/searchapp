@@ -4,12 +4,18 @@ App::uses('AppController', 'Controller');
 class CategoriesController extends AppController {
 
 	public function beforeFilter() {
-        $this->SecurityToken->unlockedActions = array('getByList');
-        $this->Auth->allow('getByList');
+        $this->SecurityToken->unlockedActions = array('getByList','name');
+        $this->Auth->allow('getByList','name');
     }
 
 	public function index() {
-		$this->getList('Category', 10, array('id', 'name', 'status','created','post_count'), [],false);
+		$reponse = $this->getList('Category', 10, array('id', 'name', 'status','created','post_count'), [],false);
+		extract($reponse);
+        $this->set(array(
+            'records' => $results,
+            'paging'=> $paging,
+            '_serialize' => array('records', 'paging') 
+        ));
 	}
 
 	public function view($id = null) {
@@ -113,17 +119,40 @@ class CategoriesController extends AppController {
 
     public function getByList()
 	{
-		$categories = $this->Category->find('list',
+		$categories = $this->Category->find('all',
 			array(
 				'conditions' => array(
 					'Category.status' => 1
 				),
-				'fields' => array('id', 'name')
+				'fields' => array('id', 'name', 'post_count')
  			)
 		);
         $this->set(array(
             'records' => $categories,
             '_serialize' => array('records')
+        ));
+	}
+
+	public function name($category)
+	{
+		$category = $this->Category->find('first', ['conditions' => ['name' => strtolower(trim($category))], 'fields' => ['id', 'name', 'label']]);
+		if($category){
+			$this->loadModel('Post');
+	        $reponse = $this->getList('Post', 10, 
+	            array('id', 'title', 'status','image','image_url','created'), 
+	            array('Post.status' => 1, 'Post.categories_id' => $category['Category']['id'])
+	        );
+			extract($reponse);
+			$category['Post'] = $results;	
+		} else {
+			$category['Post'] = null;
+			$paging = null;
+		}
+		
+        $this->set(array(
+            'records' => $category,
+            'paging'=> $paging,
+            '_serialize' => array('records', 'paging') 
         ));
 	}
 }

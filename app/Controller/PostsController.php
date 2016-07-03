@@ -5,20 +5,33 @@ class PostsController extends AppController {
 
     public function beforeFilter() {
         $this->SecurityToken->unlockedActions = array('index','view');
-        $this->Auth->allow();
+        $this->Auth->allow('index','view');
     }
 
 	public function index() {
         $this->Post->Behaviors->load('Containable');
-        $this->getList('Post', 10, 
-            array('id', 'title', 'status','image','image_url','created','Category.name'), 
-            array('Post.status' => 1), 
+
+        $conditions = array('Post.status' => 1);
+        if(!empty($this->request->query['q'])){
+            $conditions[] = array('Post.title LIKE' => '%'.$this->request->query['q'].'%');
+        }
+
+        $reponse = $this->getList('Post', 10, 
+            array('id', 'title', 'status','image','image_url','created','Category.name','Category.label'), 
+            $conditions, 
             array('Category')
         );
+        extract($reponse);
+        $this->set(array(
+            'records' => $results,
+            'paging'=> $paging,
+            '_serialize' => array('records', 'paging') 
+        ));
 	}
     
 	public function view($id) {
-        $post = $this->Post->findById($id);
+        $this->Post->Behaviors->load('Containable');
+        $post = $this->Post->get($id, array('contain' =>  array( 'Category' => array('fields' => array('id','name')) )) );
         $this->set(array(
             'record' => $post,
             '_serialize' => array('record')

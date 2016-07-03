@@ -9,9 +9,17 @@ angular.module('app', ['ngRoute', 'app.controllers', 'app.directives','app.servi
 			templateUrl: 'views/post.html', 
 			controller: 'PostController'
 		})
+		.when('/search?:q', { 
+			templateUrl: 'views/post.html', 
+			controller: 'PostController'
+		})
 		.when('/:id', {
 			templateUrl: 'views/single.html', 
 			controller: 'ViewPostController'
+		})
+		.when('/category/:category', {
+			templateUrl: 'views/post.html', 
+			controller: 'PostByCategoriesCtrl'
 		})
 		.otherwise({
 			redirectTo: '/'

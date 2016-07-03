@@ -47,16 +47,19 @@ angular.module('app.services', [])
 					};
 				});
 			},
-			paginate: function(apiUrl){
-				return $http.get(mapUrlExt.json(apiUrl)).then(function(response){
+			paginate: function(apiUrl, params, queryString){
+				var p = !angular.isUndefined(params) ? params : '';
+				var q = !angular.isUndefined(queryString) ? queryString : '';
+				return $http.get(mapUrlExt.json(apiUrl + p ), q).then(function(response){
 					return {
 						records: response.data.records,
 						paging: response.data.paging
 					};
 				});
 			},
-			get: function(apiUrl){
-				return $http.get(mapUrlExt.json(apiUrl)).then(function(response){
+			get: function(apiUrl, params){
+				var p = !angular.isUndefined(params) ? params : null;
+				return $http.get(mapUrlExt.json(apiUrl), params).then(function(response){
 					return {
 						records: response.data.records
 					};
@@ -65,7 +68,7 @@ angular.module('app.services', [])
 			getById: function(option){
 				return $http.get(mapUrlExt.json(option.apiUrl + option.id)).then(function(response){
 					return {
-						record: response.data.record	
+						record: response.data.record
 					};
 				});	
 			},

@@ -3,7 +3,7 @@
     <!-- Blog Search Well -->
     <form name="searchForm" method="post" ng-submit="search(searchForm.$valid)">
         <div class="well">
-            <h4>Blog Search</h4>
+            <h4>Search</h4>
             <div class="input-group">
                 <input type="text" class="form-control" ng-model="post.search" required>
                 <span class="input-group-btn">
@@ -18,10 +18,12 @@
 
     <!-- Blog Categories Well -->
     <div class="well">
-        <h4>Blog Categories</h4>
+        <h4>Categories</h4>
         <div class="row">
-            <div class="col-lg-6" ng-repeat="category in categorieslist">
-                <p class="mb5"><span class="label label-default category-list">{{category}}</span></p>
+            <div class="col-lg-6" ng-repeat="e in categories">
+                <p class="mb5">
+                    <span ng-click="viewByCategory($index)" class="label label-blog-home category-list">{{e.Category.name}} <span class="badge">{{e.Category.post_count || 0}}</span> </span> 
+                </p>
             </div>
         </div>
         <!-- /.row -->
