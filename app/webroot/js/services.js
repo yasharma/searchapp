@@ -9,6 +9,9 @@ angular.module('app.services', [])
 
 	    return auth;
 	})
+	/*
+	* can be uncommented by running your node server 
+	* run node server.js and then uncomment following code
 	.factory('socketio', ['$rootScope', '$location',function ($rootScope, $location) {
 		
 		var socket = io.connect('http://'+ $location.host() +':8082');
@@ -32,7 +35,7 @@ angular.module('app.services', [])
 				});
 			}
 		};
-	}])
+	}])*/
 	.factory('RestSvr', ['$http', 'mapUrlExt',function ($http, mapUrlExt) {
 		return{
 			login: function(option){

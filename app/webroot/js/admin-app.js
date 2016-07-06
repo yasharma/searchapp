@@ -102,17 +102,17 @@
         var d = b.protocol();
         c.appURL = "blog.dev" === b.host() ? d + "://blog.dev/" : d + "://peerblog.herokuapp.com/", 
         c.imagePath = c.appURL + "/img/posts_images/", c.admin = "admin.html#";
-    } ]).controller("PostController", [ "$scope", "$location", "RestSvr", "socketio", function(a, b, c, d) {
-        var e = angular.isUndefined(b.search().q) ? void 0 : {
+    } ]).controller("PostController", [ "$scope", "$location", "RestSvr", function(a, b, c) {
+        var d = angular.isUndefined(b.search().q) ? void 0 : {
             params: {
                 q: b.search().q
             }
-        }, f = function() {
-            c.paginate("posts", void 0, e).then(function(b) {
+        }, e = function() {
+            c.paginate("posts", void 0, d).then(function(b) {
                 a.posts = b.records, a.paging = b.paging;
             });
         };
-        f(), a.pageChanged = function() {
+        e(), a.pageChanged = function() {
             c.paginate("posts/index/page:" + a.paging.page).then(function(b) {
                 a.posts = b.records, a.paging = b.paging;
             });
@@ -194,44 +194,44 @@
                 };
             }
         };
-    } ]).controller("PostListController", [ "$scope", "$location", "RestSvr", "socketio", function(a, b, c, d) {
-        var e = function() {
+    } ]).controller("PostListController", [ "$scope", "$location", "RestSvr", function(a, b, c) {
+        var d = function() {
             c.paginate("users/posts_list").then(function(b) {
                 a.posts = b.records, a.paging = b.paging;
             });
         };
-        e(), a.pageChanged = function() {
+        d(), a.pageChanged = function() {
             c.paginate("users/posts_list/page:" + a.paging.page).then(function(b) {
                 a.posts = b.records, a.paging = b.paging;
             });
         }, a.editPost = function(c) {
             b.path("/edit/" + a.posts[c].Post.id);
         }, a.deletePost = function(b) {
-            var d = a.posts[b];
+            var e = a.posts[b];
             c["delete"]({
                 apiUrl: "posts/",
-                id: d.Post.id
+                id: e.Post.id
             }).then(function(a) {
-                e();
+                d();
             });
         }, a.toggleStatus = function(b) {
-            var d = a.posts[b], f = {}, g = {
+            var e = a.posts[b], f = {}, g = {
                 1: 0,
                 0: 1
             };
             f.Post = {
-                status: g[d.Post.status]
+                status: g[e.Post.status]
             }, c.put({
                 apiUrl: "posts/",
-                id: d.Post.id,
+                id: e.Post.id,
                 data: f
             }).then(function(a) {
-                e();
+                d();
             });
         };
-    } ]).controller("NewPostController", [ "$scope", "$location", "socketio", "Upload", "RestSvr", function(a, b, c, d, e) {
+    } ]).controller("NewPostController", [ "$scope", "$location", "Upload", "RestSvr", function(a, b, c, d) {
         a.getCategories = function(a) {
-            return e.get("categories/getByName", {
+            return d.get("categories/getByName", {
                 params: {
                     name: a
                 }
@@ -241,23 +241,23 @@
                 });
             });
         };
-        var f = {};
+        var e = {};
         a.uploadFile = function(a) {
-            f = a;
+            e = a;
         }, a.save = function() {
-            d.file({
+            c.file({
                 apiUrl: "posts",
                 Post: a.post,
-                file: f[0]
+                file: e[0]
             }).then(function(a) {
                 b.path("/posts");
             });
         }, a.cancel = function() {
             b.path("/posts");
         };
-    } ]).controller("EditPostController", [ "$scope", "$routeParams", "$location", "socketio", "RestSvr", "Upload", function(a, b, c, d, e, f) {
+    } ]).controller("EditPostController", [ "$scope", "$routeParams", "$location", "RestSvr", "Upload", function(a, b, c, d, e) {
         a.getCategories = function(a) {
-            return e.get("categories/getByName.json", {
+            return d.get("categories/getByName.json", {
                 params: {
                     name: a
                 }
@@ -266,20 +266,20 @@
                     return a.Category;
                 });
             });
-        }, e.getById({
+        }, d.getById({
             apiUrl: "posts/",
             id: b.id
         }).then(function(b) {
             a.post = b.record.Post, a.post.category = b.record.Category;
         });
-        var g = {};
+        var f = {};
         a.uploadFile = function(a) {
-            g = a;
+            f = a;
         }, a.updatePost = function() {
-            f.file({
+            e.file({
                 apiUrl: "posts",
                 Post: a.post,
-                file: g[0]
+                file: f[0]
             }).then(function(a) {
                 c.path("/posts");
             });
@@ -448,27 +448,7 @@
             isLogged: !1
         };
         return a;
-    }).factory("socketio", [ "$rootScope", "$location", function(a, b) {
-        var c = io.connect("http://" + b.host() + ":8082");
-        return {
-            on: function(b, d) {
-                c.on(b, function() {
-                    var b = arguments;
-                    a.$apply(function() {
-                        d.apply(c, b);
-                    });
-                });
-            },
-            emit: function(b, d, e) {
-                c.emit(b, d, function() {
-                    var b = arguments;
-                    a.$apply(function() {
-                        e && e.apply(c, b);
-                    });
-                });
-            }
-        };
-    } ]).factory("RestSvr", [ "$http", "mapUrlExt", function(a, b) {
+    }).factory("RestSvr", [ "$http", "mapUrlExt", function(a, b) {
         return {
             login: function(c) {
                 return a.post(b.json(c.apiUrl), c.data).then(function(a) {

@@ -8,7 +8,7 @@
 		$rootScope.imagePath = $rootScope.appURL +'/img/posts_images/';
 		$rootScope.admin = 'admin.html#';
 	}])
-	.controller('PostController', ['$scope', '$location', 'RestSvr', 'socketio', function($scope, $location, RestSvr, socketio){
+	.controller('PostController', ['$scope', '$location', 'RestSvr', function($scope, $location, RestSvr){
 		var search = !angular.isUndefined($location.search().q) ? {params: { q: $location.search().q }}: undefined;
 		
 		var load = function(){
@@ -18,7 +18,10 @@
 			});
 		};
 		
-		/*socketio.on('new.post.created', function(){
+		/*
+		* you need to inject socketio service in this controller 
+		* also uncomment the socket io service in service.js file
+		socketio.on('new.post.created', function(){
 			load();
 		});*/
 
@@ -134,7 +137,7 @@
 			}
 		};
 	}])
-	.controller('PostListController', ['$scope', '$location', 'RestSvr', 'socketio',function($scope, $location, RestSvr, socketio){
+	.controller('PostListController', ['$scope', '$location', 'RestSvr',function($scope, $location, RestSvr){
 		var load = function(){
 			RestSvr.paginate('users/posts_list').then(function(response){
 				$scope.posts = response.records;
@@ -175,7 +178,7 @@
 			});
 		};
 	}])
-	.controller('NewPostController', ['$scope', '$location', 'socketio', 'Upload', 'RestSvr',function($scope, $location, socketio, Upload, RestSvr){
+	.controller('NewPostController', ['$scope', '$location', 'Upload', 'RestSvr',function($scope, $location, Upload, RestSvr){
 
 		$scope.getCategories = function(value){
 			return RestSvr.get('categories/getByName', {params: { name: value }}).then(function(response){
@@ -204,7 +207,7 @@
 
 		$scope.cancel = function () { $location.path('/posts'); };
 	}])
-	.controller('EditPostController', ['$scope', '$routeParams','$location', 'socketio', 'RestSvr', 'Upload', function($scope, $routeParams, $location, socketio, RestSvr, Upload){
+	.controller('EditPostController', ['$scope', '$routeParams','$location', 'RestSvr', 'Upload', function($scope, $routeParams, $location, RestSvr, Upload){
 
 		$scope.getCategories = function(value){
 			return RestSvr.get('categories/getByName.json', {params: { name: value }}).then(function(response){
