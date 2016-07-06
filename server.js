@@ -4,3 +4,4 @@ io.on('connection', function (socket) {
 		io.emit('new.post.created');
 	});
 });
+console.log('Node server is running on port '+ 8082);

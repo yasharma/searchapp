@@ -18,9 +18,9 @@
 			});
 		};
 		
-		socketio.on('new.post.created', function(){
+		/*socketio.on('new.post.created', function(){
 			load();
-		});
+		});*/
 
 		/* Fetching all posts when first comes to page */
 		load();
@@ -159,7 +159,7 @@
 			var e = $scope.posts[index];
 			RestSvr.delete({ apiUrl: 'posts/', id: e.Post.id}).then(function(response){
 				load();
-				socketio.emit('new.post.created');
+				// socketio.emit('new.post.created');
 			});
 		};
 
@@ -170,7 +170,7 @@
 			_data.Post = {status : status[e.Post.status]};
 			
 			RestSvr.put({apiUrl: 'posts/', id: e.Post.id , data: _data}).then(function(response){
-				socketio.emit('new.post.created');
+				// socketio.emit('new.post.created');
 				load();
 			});
 		};
@@ -197,7 +197,7 @@
 				Post: $scope.post, 
 				file: file[0]
 			}).then(function (response) {
-				socketio.emit('new.post.created');
+				// socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};
@@ -231,7 +231,7 @@
 				Post: $scope.post, 
 				file: file[0]
 			}).then(function (response) {
-				socketio.emit('new.post.created');
+				// socketio.emit('new.post.created');
 				$location.path('/posts');
 			});
 		};

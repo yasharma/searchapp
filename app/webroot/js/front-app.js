@@ -33,9 +33,7 @@
                 a.posts = b.records, a.paging = b.paging;
             });
         };
-        d.on("new.post.created", function() {
-            f();
-        }), f(), a.pageChanged = function() {
+        f(), a.pageChanged = function() {
             c.paginate("posts/index/page:" + a.paging.page).then(function(b) {
                 a.posts = b.records, a.paging = b.paging;
             });
@@ -130,26 +128,26 @@
         }, a.editPost = function(c) {
             b.path("/edit/" + a.posts[c].Post.id);
         }, a.deletePost = function(b) {
-            var f = a.posts[b];
+            var d = a.posts[b];
             c["delete"]({
                 apiUrl: "posts/",
-                id: f.Post.id
+                id: d.Post.id
             }).then(function(a) {
-                e(), d.emit("new.post.created");
+                e();
             });
         }, a.toggleStatus = function(b) {
-            var f = a.posts[b], g = {}, h = {
+            var d = a.posts[b], f = {}, g = {
                 1: 0,
                 0: 1
             };
-            g.Post = {
-                status: h[f.Post.status]
+            f.Post = {
+                status: g[d.Post.status]
             }, c.put({
                 apiUrl: "posts/",
-                id: f.Post.id,
-                data: g
+                id: d.Post.id,
+                data: f
             }).then(function(a) {
-                d.emit("new.post.created"), e();
+                e();
             });
         };
     } ]).controller("NewPostController", [ "$scope", "$location", "socketio", "Upload", "RestSvr", function(a, b, c, d, e) {
@@ -173,7 +171,7 @@
                 Post: a.post,
                 file: f[0]
             }).then(function(a) {
-                c.emit("new.post.created"), b.path("/posts");
+                b.path("/posts");
             });
         }, a.cancel = function() {
             b.path("/posts");
@@ -204,7 +202,7 @@
                 Post: a.post,
                 file: g[0]
             }).then(function(a) {
-                d.emit("new.post.created"), c.path("/posts");
+                c.path("/posts");
             });
         }, a.cancel = function() {
             c.path("/dashboard");
