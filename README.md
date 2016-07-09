@@ -35,8 +35,10 @@ Console/cake schema create
 ```
 ###### More info on schema migration can found [here](http://book.cakephp.org/2.0/en/console-and-shells/schema-management-and-migrations.html)
 
-5. ```Run Grunt command line and point your browser lik http://localhost/peerblog or anyhow you setup```
+5. ```Run Grunt command line and point your browser lik http://localhost/peerblog/index.html or anyhow you setup```
 Now grunt will watch your files for changes and everytime file is saved after changes grunt will run tasks defined in ```Gruntfile.js```
+
+6. Admin can accessed with http://blog.dev/admin.html or http://localhost/peerblog/admin.html by default a user will created when you first hit this url http://locahost/peerblog/users.json or http://blog.dev/users.json with post request without any parameters it will create default user with email ```admin@peerblog.dev``` and password ```admin```
 
 **NOTE:** During development i had use nginx server and nginx server block you can get to know how to setup Nginx Server Blocks ([Virtual Hosts](https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-server-blocks-virtual-hosts-on-ubuntu-14-04-lts)) on Ubuntu however application can be run on either apache or nginx. I've also included my server block .conf file (blog.dev) if you need some reference after creating server blocks. after setup same you can access your application as (http://blog.dev)
 
