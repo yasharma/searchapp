@@ -5,7 +5,8 @@ class UsersController extends AppController {
 
 	public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('login','checklogin');
+        $this->SecurityToken->unlockedActions = array('add', 'login');
+        $this->Auth->allow('login','checklogin', 'add');
     }
 
     public function isAuthorized($user) {
@@ -87,12 +88,32 @@ class UsersController extends AppController {
 	}
 
 	public function add() {
-		if ($this->request->is('post')) {
-			$this->User->create();
-			if ($this->User->save($this->request->data)) {
-				return $this->flash(__('The user has been saved.'), array('action' => 'index'));
-			}
+		
+		$this->request->data = array(
+			'User' => array(
+				'email' => 'admin@peerblog.dev',
+				'password' => 'admin',
+				'role' => 'admin',
+				'firstname' => 'Admin'
+			)
+		);
+			
+		$this->User->create();
+		if ($this->User->save($this->request->data)) {
+			$message = array(
+                'text' => __('The user has been saved'),
+                'type' => 'success'
+            );
+		} else {
+			$message = array(
+                'text' => __('The user has not been saved'),
+                'type' => 'error'
+            );
 		}
+		$this->set(array(
+            'message' => $message,
+            '_serialize' => array('message','user')
+        ));
 	}
 
 	public function edit($id = null) {
