@@ -11,11 +11,11 @@ class SearchController extends AppController {
 	public function find()
 	{
 		$page = $this->request->data['page'];
-		$first = (($page-1) * 10) + 1;
+		$next = $this->request->data['next'];
 		if( !empty($this->request->data['q']) ){
 			$query = urlencode($this->request->data['q']);
 
-			$results = $this->_bing_search($query, $first);
+			$results = $this->_bing_search($query, $next);
 			$paging = array('page' => $page, 'count' => $this->_TOTAL_COUNT, 'limit' => count($results));
 	       
 			$this->set(array(
