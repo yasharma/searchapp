@@ -72,6 +72,8 @@ class SearchController extends AppController {
 		            $result[$key]['SearchResult']['search_url'] = $url;
 		            $result[$key]['SearchResult']['next'] = $next;
 		            $result[$key]['SearchResult']['previous'] = $previous;
+		            $result[$key]['SearchResult']['next_url'] = $next_page;
+		            $result[$key]['SearchResult']['previous_url'] = $previous_page;
 		        }
 		    }
 		}
