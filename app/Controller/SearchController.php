@@ -16,7 +16,7 @@ class SearchController extends AppController {
 			$query = urlencode($this->request->data['q']);
 
 			$results = $this->_bing_search($query, $page);
-			$paging = array('page' => $page, 'limit' => $this->_TOTAL_COUNT, 'count' => count($results));
+			$paging = array('page' => $page, 'count' => $this->_TOTAL_COUNT, 'limit' => count($results));
 	       
 			$this->set(array(
 	            'records' => $results,
