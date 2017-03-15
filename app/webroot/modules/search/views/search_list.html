@@ -1,0 +1,21 @@
+<div class="panel panel-default" >
+  	<div class="panel-heading">Your Last saved searches</div>
+  	<table class="table table-bordered">
+    	<thead>
+    		<tr>
+	    		<th>Search title</th>
+	    		<th>Action</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    		<tr ng-repeat="x in results">
+    			<td>{{x.Search.title}}</td>
+    			<td><a ng-href="#!/new?single={{x.Search.title}}&id={{x.Search.id}}" >show</a></td>
+    		</tr>
+    		<tr ng-if="results.length === 0">
+    			<td colspan="2" class="text-center"> No Save search, <a href="#!/new">perform a new search</a></td>
+    		</tr>
+    	</tbody>
+  	</table>
+</div>
+<ul uib-pagination ng-if="paging.count > paging.limit" total-items="paging.count" ng-model="paging.page" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="paging.limit" force-ellipses="forceEllipses" ng-change="pageChanged()"></ul>

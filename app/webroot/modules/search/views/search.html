@@ -1,0 +1,49 @@
+<div class="row">
+	<form name="singleSearchForm" ng-submit="singleSearch(singleSearchForm.$valid)" novalidate>
+		<div class="col-lg-6">
+			<label>Single Search</label>
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit">Go!</button>
+				</span>
+				<input type="text" class="form-control" ng-model="single" placeholder="Search for anything ..." required>
+			</div><!-- /input-group -->
+		</div><!-- /.col-lg-6 -->
+	</form>	
+	<form name="keywordSearchForm" ng-submit="keywordSearch(keywordSearchForm.$valid)" novalidate>
+		<div class="col-lg-6">
+			<label>Keyword Search</label>
+			<div class="input-group">
+				<input type="text" class="form-control" ng-model="keyword" placeholder="Search for a keywords ..." required>
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit">Go!</button>
+				</span>
+			</div><!-- /input-group -->
+		</div><!-- /.col-lg-6 -->
+	</form>	
+</div><!-- /.row -->
+<!-- <uib-progressbar max="max" value="dynamic">
+	<span style="color:white; white-space:nowrap;">{{dynamic}} / {{max}}</span>
+</uib-progressbar> -->
+<hr>
+<div class="panel panel-default" ng-show="results.length > 0">
+  	<div class="panel-heading">Search results for "{{single || keyword || q}}"</div>
+  	<table class="table table-bordered">
+    	<thead>
+    		<tr>
+	    		<th>Title</th>
+	    		<th>Description</th>
+	    		<th>URL</th>
+    		</tr>
+    	</thead>
+    	<tbody>
+    		<tr ng-repeat="x in results">
+    			<td>{{x.SearchResult.title}}</td>
+    			<td>{{x.SearchResult.description}}</td>
+    			<td class="url-break">{{x.SearchResult.url}}</td>
+    		</tr>
+    	</tbody>
+  	</table>
+</div>
+<ul uib-pagination ng-if="paging.count > paging.limit" total-items="paging.count" ng-model="paging.page" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false" items-per-page="paging.limit" force-ellipses="forceEllipses" ng-change="pageChanged()"></ul>
+<!-- <ul uib-pager ng-if="paging.count > paging.limit" total-items="paging.count" ng-change="pageChanged()" ng-model="paging.page"></ul> -->
