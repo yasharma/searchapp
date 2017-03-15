@@ -54,9 +54,9 @@ class SearchController extends AppController {
 		    }
 
 		    $next_page = $pokemon_xpath->query('//li[@class="b_pag"]/nav/ul/li/a[@class="sb_pagN"]/@href')->item(0)->nodeValue;
-		    parse_str(parse_url($next_page, PHP_URL_QUERY), $query_params);
+		    parse_str(parse_url($next_page, PHP_URL_QUERY), $query_params_next);
 		    
-		    if (array_key_exists('first', $query_params)) {
+		    if (array_key_exists('first', $query_params_next)) {
 		        $next = $query_params['first'];
 		    }
 
