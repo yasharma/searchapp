@@ -31,7 +31,7 @@ class SearchController extends AppController {
 	protected function _bing_search($query, $first)
 	{
 		$result = [];
-		$next = 0;
+		$next = 0;$previous=1;
 		$url = ($first == 0) ? $this->_SEARCH_URL . $query : $this->_SEARCH_URL . $query . '&first=' . $first;
 		$html = file_get_contents($url);
 		
@@ -51,6 +51,13 @@ class SearchController extends AppController {
 		        $next = $query_params['first'];
 		    }
 
+		    $previous_page = @$pokemon_xpath->query('//li[@class="b_pag"]/nav/ul/li/a[@class="sb_pagP"]/@href')->item(0)->nodeValue;
+		    parse_str(parse_url($previous_page, PHP_URL_QUERY), $query_params);
+		    
+		    if (array_key_exists('first', $query_params)) {
+		        $previous = $query_params['first'];
+		    }
+
 		    if($pokemon_row->length > 0){
 		        foreach($pokemon_row as $key => $row){
 		            $result[$key]['SearchResult']['title'] = @$pokemon_xpath->query('h2', $row)->item(0)->nodeValue;
@@ -62,6 +69,7 @@ class SearchController extends AppController {
 		            $result[$key]['SearchResult']['url'] = @$pokemon_xpath->query('h2/a/@href', $row)->item(0)->nodeValue;
 		            $result[$key]['SearchResult']['search_url'] = $url;
 		            $result[$key]['SearchResult']['next'] = $next;
+		            $result[$key]['SearchResult']['previous'] = $previous;
 		        }
 		    }
 		}
