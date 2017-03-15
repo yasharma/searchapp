@@ -57,7 +57,7 @@ class SearchController extends AppController {
 		    parse_str(parse_url($next_page, PHP_URL_QUERY), $query_params_next);
 		    
 		    if (array_key_exists('first', $query_params_next)) {
-		        $next = $query_params['first'];
+		        $next = $query_params_next['first'];
 		    }
 
 		    if($pokemon_row->length > 0){
